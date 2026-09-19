@@ -165,9 +165,28 @@ textarea{min-height:80px}
 .backup{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .off{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;background:var(--wine-soft);color:var(--wine);font-family:"Noto Sans KR";margin-left:6px;vertical-align:middle}
 
+/* 받아쓰기 · 제안서 */
+.pick.scroll{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}.pick.scroll::-webkit-scrollbar{display:none}.pick.scroll button{flex:none}
+.mic{width:44px;height:44px;border-radius:6px;border:1.5px solid var(--wine);background:var(--wine-soft);font-size:18px;display:grid;place-items:center;flex:none;color:var(--wine);font-family:"Noto Sans KR"}
+.mic.on{background:var(--wine);color:#fff;animation:pulse 1s infinite alternate}
+.inrow{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:start}
+.lbl2{font-size:11px;letter-spacing:.15em;color:var(--gold);font-weight:700;margin:12px 0 4px;font-family:"Noto Sans KR"}
+.chkrow{display:flex;align-items:center;gap:10px;margin-top:12px;font-family:"Noto Sans KR";font-size:14.5px}.chkrow input{width:20px;height:20px;accent-color:var(--wine)}
+.grat .no{grid-template-columns:28px 1fr auto}
+.pdoc{cursor:pointer}.pdoc .dt{align-items:center;gap:8px}
+.pdoc .ptitle{font-size:17px;font-weight:700;line-height:1.6;margin-top:4px;overflow-wrap:anywhere}
+.pdoc.dropped .ptitle{text-decoration:line-through;color:var(--muted)}
+.pdoc .pbg{font-size:14px;color:var(--muted);font-family:"Noto Sans KR";line-height:1.7;white-space:pre-wrap;margin-top:4px;overflow-wrap:anywhere}
+.pdoc:not(.open) .pbg{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pstamp{font-family:"Gowun Batang";font-weight:700;font-size:12px;padding:1px 9px;border:1.5px solid var(--ribbon);color:var(--ribbon);border-radius:999px;transform:rotate(-4deg);display:inline-block;flex:none}
+.pstamp.review{border-style:dashed;border-color:var(--navy);color:var(--navy)}.pstamp.dropped{border-color:var(--faint);color:var(--faint)}
+.pdoc .key{color:var(--ribbon);font-weight:700}
+.pfoot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px;border-top:1px dashed var(--rule);padding-top:8px}
+input[type=date]{font:inherit;font-size:16px;padding:8px 10px;border-radius:6px;border:1.5px solid var(--rule);background:var(--paper);color:inherit;font-family:"Noto Sans KR"}
+
 /* tabs */
 .tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;background:var(--page);border-top:1px solid var(--rule);padding:6px 4px calc(env(safe-area-inset-bottom,0px) + 6px);box-shadow:0 -6px 20px rgba(60,40,10,.08)}
-.tabs button{flex:1;padding:6px 2px;font-size:11px;color:var(--faint);display:grid;place-items:center;gap:2px;font-family:"Noto Sans KR"}
+.tabs button{flex:1;min-width:0;padding:6px 1px;font-size:10.5px;white-space:nowrap;color:var(--faint);display:grid;place-items:center;gap:2px;font-family:"Noto Sans KR"}
 .tabs button .ic{font-size:17px;line-height:1}
 .tabs button.on{color:var(--navy);font-weight:700}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -179,7 +198,7 @@ textarea{min-height:80px}
     <div class="date" id="topDate"></div>
     <h1>아침 제단</h1>
     <div class="verse" id="topVerse"></div>
-    <div class="row"><span class="stamp">🔥 연속 <b id="stStreak">0</b>일</span><span class="stamp">제단 <b id="stDays">0</b>일</span><span class="stamp">응답 <b id="stAns">0</b></span><span class="stamp">감사 <b id="stGrat">0</b>개</span></div>
+    <div class="row"><span class="stamp">🔥 연속 <b id="stStreak">0</b>일</span><span class="stamp">제단 <b id="stDays">0</b>일</span><span class="stamp">응답 <b id="stAns">0</b></span><span class="stamp">감사 <b id="stGrat">0</b>개</span><span class="stamp" id="stDdayWrap" hidden>수능 <b id="stDday"></b></span></div>
   </div>
 
   <!-- TODAY -->
@@ -190,9 +209,14 @@ textarea{min-height:80px}
       <div class="flow" id="flow"></div>
     </div>
     <div class="sheet">
-      <h2><span class="ch">II</span>오늘의 확언</h2>
+      <h2><span class="ch">II</span>오늘의 말씀</h2>
       <div class="big"><span class="q">“</span><span id="homeAff"></span></div>
-      <div class="rowbtns"><button class="btn primary" data-go="aff">소리 내어 고백하러 가기</button><button class="btn" id="shuffleAff">다른 문장</button></div>
+      <div class="rowbtns"><button class="btn primary" data-go="aff">소리 내어 읽고 고백하러 가기</button><button class="btn" id="shuffleAff">다른 말씀</button></div>
+    </div>
+    <div class="sheet" id="homePropSheet">
+      <h2><span class="ch">II-b</span>오늘 다시 읽을 제안<small>인생 제안서</small></h2>
+      <div class="think"><div class="q" id="homeProp"></div><div class="s" id="homePropBg"></div></div>
+      <div class="rowbtns"><button class="btn" id="homePropNext">다른 제안</button><button class="btn" data-go="prop">제안서 보기</button></div>
     </div>
     <div class="sheet">
       <h2><span class="ch">III</span>오늘의 질문<small>생각할 거리</small></h2>
@@ -206,24 +230,37 @@ textarea{min-height:80px}
     </div>
   </section>
 
-  <!-- AFFIRMATION -->
+  <!-- WORD -->
   <section class="page" id="p-aff">
     <div class="sheet">
-      <h2><span class="ch">II</span>확언 · 신앙 고백<small id="affDate"></small></h2>
-      <p class="lead">눈으로 읽지 말고 <b>입으로 말하라</b>. 녹음을 켜고 소리 내어 읽으면 글로 받아 적어 오늘 기록에 남긴다. <span class="off">받아쓰기는 인터넷 필요</span> 없으면 직접 적어도 된다.</p>
-      <div class="pick" id="affPick"></div>
-      <div class="big"><span class="q">“</span><span id="affText"></span></div>
-      <textarea id="affCustom" placeholder="내 말로 바꿔 고백하고 싶으면 여기에 적는다 (선택)" style="margin-top:10px;min-height:60px"></textarea>
-      <div class="rowbtns"><button class="btn rec" id="affRec">● 녹음하며 고백하기</button><button class="btn" id="affSave" disabled>오늘 기록에 저장</button></div>
+      <h2><span class="ch">II</span>말씀 고백<small id="affDate"></small></h2>
+      <p class="lead">① 말씀을 <b>소리 내어</b> 읽는다. ② 그 말씀을 붙들고 <b>내 말로 고백</b>한다 — 말하면 글로 받아 적는다. <span class="off">받아쓰기는 인터넷 필요</span> 없으면 직접 적어도 된다.</p>
+      <div class="pick scroll" id="affPick"></div>
+      <div class="big" style="margin-top:10px"><span class="q">“</span><span id="affText"></span></div>
+      <div class="rowbtns"><button class="btn" id="affRead">① 소리 내어 읽었다</button><button class="btn small" id="vAddToggle">내 구절 추가</button><button class="btn small" id="vDel" hidden>이 구절 삭제</button></div>
+      <div id="vAddBox" hidden>
+        <div class="lbl2">구절 본문</div><textarea id="vNewT" placeholder="내가 붙들고 싶은 말씀을 적는다" style="min-height:70px"></textarea>
+        <div class="lbl2">장절</div><div class="addrow" style="margin-top:0"><input type="text" id="vNewR" placeholder="예: 잠 19:21" maxlength="30"><button class="btn small" id="vAdd">추가</button></div>
+      </div>
+      <div class="lbl2" style="margin-top:16px">② 고백</div>
+      <p class="lead" style="margin:0">틀 — "이 말씀에서 하나님은 …한 분이시다. 그래서 오늘 나는 …하겠다."</p>
+      <div class="rowbtns"><button class="btn rec" id="affRec">● 말로 고백하기</button><button class="btn" id="affSave" disabled>오늘 기록에 저장</button></div>
       <div class="hint" id="affHint"></div>
       <div class="transcript empty" id="affTx" contenteditable="true">받아 적은 고백이 여기 뜬다. 인터넷이 없으면 여기에 직접 타이핑해도 된다.</div>
-      <div class="audio" id="affAudio" hidden></div>
       <div class="saved" id="affSaved"></div>
     </div>
     <div class="sheet">
-      <h2><span class="ch">II-b</span>감사 세 가지</h2>
-      <p class="lead">당연해 보이는 것부터. 구체적일수록 힘이 세다.</p>
+      <h2><span class="ch">II-b</span>오늘의 잠언<small id="provMeta"></small></h2>
+      <p class="lead">잠언은 31장. 날짜와 같은 장을 성경에서 펴서 읽는다. 마음에 남은 한 절을 적어 두자.</p>
+      <div class="inrow"><input type="text" id="provNote" placeholder="마음에 남은 절 · 한 줄 생각" maxlength="200"><button class="mic" id="provMic">🎙</button></div>
+      <div class="hint" id="provHint"></div>
+      <div class="rowbtns" style="margin-top:4px"><button class="btn" id="provDone">읽었다</button></div>
+    </div>
+    <div class="sheet">
+      <h2><span class="ch">II-c</span>감사 세 가지</h2>
+      <p class="lead">당연해 보이는 것부터. 구체적일수록 힘이 세다. 🎙을 누르고 말해도 된다.</p>
       <div class="grat" id="grat"></div>
+      <div class="hint" id="gratHint"></div>
       <div class="saved" id="gratSaved"></div>
     </div>
   </section>
@@ -235,10 +272,9 @@ textarea{min-height:80px}
       <div class="acts" id="acts"></div>
       <div class="lead" style="margin-top:12px;letter-spacing:.1em">오늘의 추천 제목</div>
       <div class="topics" id="todayTopics"></div>
-      <div class="rowbtns"><button class="btn rec" id="prayRec">● 녹음하며 기도하기</button><button class="btn" id="praySave" disabled>오늘 기록에 저장</button></div>
+      <div class="rowbtns"><button class="btn rec" id="prayRec">● 말하며 기도하기</button><button class="btn" id="praySave" disabled>오늘 기록에 저장</button></div>
       <div class="hint" id="prayHint"></div>
       <div class="transcript empty" id="prayTx" contenteditable="true">받아 적은 기도가 여기 뜬다. 인터넷이 없으면 직접 적어도 된다.</div>
-      <div class="audio" id="prayAudio" hidden></div>
       <div class="saved" id="praySaved"></div>
       <div class="timer"><div class="t mono" id="silT">5:00</div><div class="l">침묵 기도</div><div class="rowbtns"><button class="btn small" data-sil="180">3분</button><button class="btn small" data-sil="300">5분</button><button class="btn small" data-sil="600">10분</button><button class="btn small primary" id="silStart">시작</button></div></div>
     </div>
@@ -254,13 +290,21 @@ textarea{min-height:80px}
   <section class="page" id="p-todo">
     <div class="sheet">
       <h2><span class="ch">IV</span>오늘의 할 일<small id="todoMeta"></small></h2>
-      <p class="lead">"무슨 일을 하든지 주께 하듯 하라." 오늘 꼭 할 셋에 ★.</p>
+      <p class="lead">"무슨 일을 하든지 주께 하듯 하라." 오늘 꼭 할 셋에 ★. 하나를 끝내고 다음으로.</p>
       <div class="addrow"><input type="text" id="tdNew" placeholder="할 일 (Enter로 추가)" maxlength="80"><button class="btn small" id="tdAdd">추가</button></div>
       <div class="todos" id="todos" style="margin-top:10px"></div>
       <div class="todohint">못 끝낸 일은 내일로 넘어간다. 3일 넘게 이월된 일은 굵게 표시된다 — 쪼개거나 버리자.</div>
     </div>
+    <div class="sheet">
+      <h2><span class="ch">IV-b</span>아이디어 보관함<small id="ideaMeta"></small></h2>
+      <p class="lead">공부하다 새 아이디어·딴생각이 떠오르면 붙잡지 말고 여기 <b>맡겨 두고</b> 하던 일로 돌아간다. 주말에 열어서 할 일로 올리거나, 제안서로 남기거나, 버린다.</p>
+      <div class="addrow"><input type="text" id="ideaNew" placeholder="떠오른 생각 한 줄" maxlength="200"><button class="mic" id="ideaMic">🎙</button><button class="btn small" id="ideaAdd">맡기기</button></div>
+      <div class="hint" id="ideaHint"></div>
+      <div class="topics" id="ideas"></div>
+    </div>
   </section>
 
+  <!-- (아이디어 보관함은 할 일 탭 안) -->
   <!-- CREED & IDENTITY & CATECHISM -->
   <section class="page" id="p-creed">
     <div class="sheet">
@@ -273,32 +317,64 @@ textarea{min-height:80px}
     <div class="sheet"><h2><span class="ch">V-d</span>장로교인의 정체성 일곱 가지</h2><div class="idlist" id="idlist"></div></div>
   </section>
 
+  <!-- PROPOSALS -->
+  <section class="page" id="p-prop">
+    <div class="sheet" id="propEditor" hidden>
+      <h2><span class="ch">VI</span><span id="peTitle">기안</span><small id="peNo"></small></h2>
+      <div class="lbl2" style="margin-top:4px">제안</div>
+      <div class="inrow"><textarea id="peT" placeholder="예: 중고 거래 대신 새 상품을 사자" style="min-height:64px;font-weight:700"></textarea><button class="mic" id="peTMic">🎙</button></div>
+      <div class="lbl2">배경 · 계기</div>
+      <div class="inrow"><textarea id="peB" placeholder="어떤 일을 겪고 이 결론에 이르렀는지. 나중에 '왜 이렇게 정했지?' 싶을 때 읽는다." style="min-height:110px"></textarea><button class="mic" id="peBMic">🎙</button></div>
+      <div class="hint" id="peHint">🎙을 누르고 말하면 글로 받아 적는다. 글은 언제든 직접 고칠 수 있다.</div>
+      <div class="lbl2">분류</div>
+      <input type="text" id="peC" list="peCats" placeholder="소비, 공부, 관계, 건강…" maxlength="20"><datalist id="peCats"></datalist>
+      <div class="lbl2">결재</div>
+      <div class="pick" id="peStatus" style="margin-top:0"><button data-st="active">채택 · 시행 중</button><button data-st="review">검토 중</button><button data-st="dropped">폐기</button></div>
+      <div class="hint">확신이 없으면 '검토 중', 생각이 바뀌었으면 지우지 말고 '폐기'로 남긴다.</div>
+      <label class="chkrow" for="pePin"><input type="checkbox" id="pePin"> 핵심 제안으로 맨 위에 두기</label>
+      <div class="rowbtns"><button class="btn primary" id="peSave">저장</button><button class="btn" id="peCancel">취소</button><button class="btn" id="peDel" hidden style="color:var(--wine);border-color:var(--wine)">삭제</button></div>
+    </div>
+    <div class="sheet">
+      <h2><span class="ch">VI</span>인생 제안서<small id="propMeta"></small></h2>
+      <p class="lead">값을 치르고 얻은 교훈을 제안서로 남긴다. 수신: 미래의 나 · 발신: 오늘의 나.</p>
+      <div class="rowbtns" style="margin:0 0 10px"><button class="btn primary" id="propNew">새 제안 기안하기</button></div>
+      <input type="text" id="propSearch" placeholder="제안·계기에서 찾기">
+      <div class="pick" id="propChips"></div>
+      <div class="arch" id="propList"></div>
+    </div>
+  </section>
+
   <!-- RECORDS -->
   <section class="page" id="p-rec">
     <div class="sheet">
-      <h2><span class="ch">VI</span>제단 달력<small id="calMonth"></small></h2>
+      <h2><span class="ch">VII</span>제단 달력<small id="calMonth"></small></h2>
       <div class="cal" id="cal"></div>
-      <div class="legend"><span><i style="background:var(--gold)"></i>확언</span><span><i style="background:var(--wine)"></i>기도</span><span><i style="background:var(--olive)"></i>할 일</span><span>파란 칸 = 셋 다</span></div>
+      <div class="legend"><span><i style="background:var(--gold)"></i>말씀 고백</span><span><i style="background:var(--wine)"></i>기도</span><span><i style="background:var(--olive)"></i>할 일</span><span>파란 칸 = 셋 다</span></div>
     </div>
     <div class="sheet">
-      <h2><span class="ch">VI-b</span>이번 주 회고</h2>
+      <h2><span class="ch">VII-b</span>이번 주 회고</h2>
       <div class="review" id="review"></div>
       <div class="hint" id="reviewNote"></div>
     </div>
     <div class="sheet">
-      <h2><span class="ch">VI-c</span>기록 다시 읽기</h2>
-      <input type="text" class="search" id="search" placeholder="고백·기도·감사 속 단어로 찾기">
+      <h2><span class="ch">VII-c</span>기록 다시 읽기</h2>
+      <input type="text" class="search" id="search" placeholder="고백·잠언·기도·감사 속 단어로 찾기">
       <div class="arch" id="arch"></div>
     </div>
     <div class="sheet">
-      <h2><span class="ch">VI-d</span>응답된 기도</h2>
+      <h2><span class="ch">VII-d</span>응답된 기도</h2>
       <div class="topics" id="answered"></div>
     </div>
     <div class="sheet">
-      <h2><span class="ch">VI-e</span>백업</h2>
+      <h2><span class="ch">VII-e</span>백업</h2>
       <p class="lead">기록은 이 기기 안에만 있다. 가끔 복사해서 메모 앱에 붙여 두면 폰을 바꿔도 살릴 수 있다.</p>
       <div class="backup"><button class="btn" id="bkCopy">기록 전체 복사</button><button class="btn" id="bkPaste">붙여넣어 복원</button></div>
       <div class="hint" id="bkHint"></div>
+    </div>
+    <div class="sheet">
+      <h2><span class="ch">VII-f</span>수능 날짜</h2>
+      <p class="lead">맨 위에 남은 날을 보여 준다. 비워 두면 표시하지 않는다.</p>
+      <input type="date" id="ddayIn">
     </div>
     <div class="sync" id="syncMsg">이 기기에 저장됨</div>
   </section>
@@ -306,10 +382,11 @@ textarea{min-height:80px}
 
 <nav class="tabs">
   <button class="on" data-tab="today"><span class="ic">☀</span>오늘</button>
-  <button data-tab="aff"><span class="ic">✦</span>확언</button>
+  <button data-tab="aff"><span class="ic">✦</span>말씀</button>
   <button data-tab="pray"><span class="ic">🙏</span>기도</button>
   <button data-tab="todo"><span class="ic">☑</span>할 일</button>
   <button data-tab="creed"><span class="ic">✝</span>고백문</button>
+  <button data-tab="prop"><span class="ic">✎</span>제안서</button>
   <button data-tab="rec"><span class="ic">▤</span>기록</button>
 </nav>
 
@@ -321,21 +398,38 @@ const todayKey = () => fmtK(new Date());
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 // ---------- content ----------
-const AFF = [
- {t:'나는 우연히 태어난 존재가 아니라, 하나님이 창세 전에 택하시고 사랑으로 부르신 자녀다.', r:'엡 1:4-5'},
- {t:'내 구원은 내 행위가 아니라 오직 은혜, 오직 믿음, 오직 그리스도로 말미암는다. 그래서 흔들리지 않는다.', r:'엡 2:8-9'},
- {t:'사람의 제일 되는 목적은 하나님을 영화롭게 하고 그분을 영원토록 즐거워하는 것이다. 오늘 하루도 그 목적을 위해 산다.', r:'웨스트민스터 소요리문답 1문, 고전 10:31'},
- {t:'살아서나 죽어서나 나는 내 것이 아니요, 몸과 영혼이 모두 신실하신 구주 예수 그리스도의 것이다.', r:'하이델베르크 요리문답 1문, 롬 14:8'},
- {t:'하나님은 모든 일을 그분의 뜻대로 다스리신다. 오늘 내게 오는 일도 그분의 손을 거쳐 온다.', r:'롬 8:28, 잠 16:9'},
- {t:'나는 그리스도의 몸인 교회의 지체다. 혼자 믿지 않고, 함께 예배하고 함께 짐을 진다.', r:'고전 12:27, 갈 6:2'},
- {t:'성경은 하나님의 말씀이며 내 삶의 유일한 최종 기준이다. 내 감정보다 말씀이 옳다.', r:'딤후 3:16, 시 119:105'},
- {t:'내 공부와 일과 운동은 예배다. 사람에게가 아니라 주께 하듯 오늘 맡은 일을 한다.', r:'골 3:23'},
- {t:'나는 성령이 거하시는 성전이다. 내 몸과 말과 생각을 거룩하게 지킨다.', r:'고전 6:19-20'},
- {t:'내가 넘어져도 은혜는 나보다 크다. 회개하고 다시 일어나는 것이 성도의 길이다.', r:'잠 24:16, 요일 1:9'},
- {t:'두려움은 오늘의 내 주인이 아니다. 하나님이 나와 함께하시니 담대하다.', r:'수 1:9, 사 41:10'},
- {t:'나는 세상의 소금과 빛이다. 내가 있는 자리가 조금 더 밝아지게 산다.', r:'마 5:13-16'},
- {t:'내 힘으로 하루를 지탱하지 않는다. 일용할 양식처럼 오늘 필요한 은혜를 오늘 구한다.', r:'마 6:11, 애 3:22-23'},
- {t:'나는 하나님 나라의 백성이며 영원한 소망을 가진 사람이다. 오늘의 작은 순종이 영원에 닿는다.', r:'빌 3:20, 고전 15:58'},
+const WORD = [
+ {t:'너는 마음을 다하여 여호와를 의뢰하고 네 명철을 의지하지 말라 너는 범사에 그를 인정하라 그리하면 네 길을 지도하시리라', r:'잠 3:5-6'},
+ {t:'너의 행사를 여호와께 맡기라 그리하면 너의 경영하는 것이 이루리라', r:'잠 16:3'},
+ {t:'사람이 마음으로 자기의 길을 계획할지라도 그 걸음을 인도하는 자는 여호와시니라', r:'잠 16:9'},
+ {t:'여호와를 경외하는 것이 지혜의 근본이요 거룩하신 자를 아는 것이 명철이니라', r:'잠 9:10'},
+ {t:'무릇 지킬만한 것보다 더욱 네 마음을 지키라 생명의 근원이 이에서 남이니라', r:'잠 4:23'},
+ {t:'여호와를 경외하는 것이 지식의 근본이어늘 미련한 자는 지혜와 훈계를 멸시하느니라', r:'잠 1:7'},
+ {t:'여호와의 이름은 견고한 망대라 의인은 그리로 달려가서 안전함을 얻느니라', r:'잠 18:10'},
+ {t:'대저 의인은 일곱번 넘어질지라도 다시 일어나려니와 악인은 재앙으로 인하여 엎드러지느니라', r:'잠 24:16'},
+ {t:'철이 철을 날카롭게 하는 것 같이 사람이 그 친구의 얼굴을 빛나게 하느니라', r:'잠 27:17'},
+ {t:'유순한 대답은 분노를 쉬게 하여도 과격한 말은 노를 격동하느니라', r:'잠 15:1'},
+ {t:'노하기를 더디하는 자는 용사보다 낫고 자기의 마음을 다스리는 자는 성을 빼앗는 자보다 나으니라', r:'잠 16:32'},
+ {t:'말이 많으면 허물을 면키 어려우나 그 입술을 제어하는 자는 지혜가 있느니라', r:'잠 10:19'},
+ {t:'부지런한 자의 경영은 풍부함에 이를 것이나 조급한 자는 궁핍함에 이를 따름이니라', r:'잠 21:5'},
+ {t:'네가 자기 사업에 근실한 사람을 보았느냐 이러한 사람은 왕 앞에 설 것이요 천한 자 앞에 서지 아니하리라', r:'잠 22:29'},
+ {t:'여호와는 나의 목자시니 내가 부족함이 없으리로다', r:'시 23:1'},
+ {t:'주의 말씀은 내 발에 등이요 내 길에 빛이니이다', r:'시 119:105'},
+ {t:'하나님은 우리의 피난처시요 힘이시니 환난 중에 만날 큰 도움이시라', r:'시 46:1'},
+ {t:'내가 네게 명한 것이 아니냐 마음을 강하게 하고 담대히 하라 두려워 말며 놀라지 말라 네가 어디로 가든지 네 하나님 여호와가 너와 함께 하느니라', r:'수 1:9'},
+ {t:'두려워 말라 내가 너와 함께 함이니라 놀라지 말라 나는 네 하나님이 됨이니라 내가 너를 굳세게 하리라 참으로 너를 도와 주리라 참으로 나의 의로운 오른손으로 너를 붙들리라', r:'사 41:10'},
+ {t:'오직 여호와를 앙망하는 자는 새 힘을 얻으리니 독수리의 날개치며 올라감 같을 것이요 달음박질하여도 곤비치 아니하겠고 걸어가도 피곤치 아니하리로다', r:'사 40:31'},
+ {t:'여호와의 자비와 긍휼이 무궁하시므로 우리가 진멸되지 아니함이니이다 이것이 아침마다 새로우니 주의 성실이 크도소이다', r:'애 3:22-23'},
+ {t:'너희는 먼저 그의 나라와 그의 의를 구하라 그리하면 이 모든 것을 너희에게 더하시리라', r:'마 6:33'},
+ {t:'우리가 알거니와 하나님을 사랑하는 자 곧 그 뜻대로 부르심을 입은 자들에게는 모든 것이 합력하여 선을 이루느니라', r:'롬 8:28'},
+ {t:'너희는 이 세대를 본받지 말고 오직 마음을 새롭게 함으로 변화를 받아 하나님의 선하시고 기뻐하시고 온전하신 뜻이 무엇인지 분별하도록 하라', r:'롬 12:2'},
+ {t:'내가 그리스도와 함께 십자가에 못 박혔나니 그런즉 이제는 내가 산 것이 아니요 오직 내 안에 그리스도께서 사신 것이라', r:'갈 2:20 상'},
+ {t:'너희가 그 은혜를 인하여 믿음으로 말미암아 구원을 얻었나니 이것이 너희에게서 난 것이 아니요 하나님의 선물이라 행위에서 난 것이 아니니 이는 누구든지 자랑치 못하게 함이니라', r:'엡 2:8-9'},
+ {t:'아무 것도 염려하지 말고 오직 모든 일에 기도와 간구로 너희 구할 것을 감사함으로 하나님께 아뢰라 그리하면 모든 지각에 뛰어난 하나님의 평강이 그리스도 예수 안에서 너희 마음과 생각을 지키시리라', r:'빌 4:6-7'},
+ {t:'내게 능력 주시는 자 안에서 내가 모든 것을 할 수 있느니라', r:'빌 4:13'},
+ {t:'무슨 일을 하든지 마음을 다하여 주께 하듯 하고 사람에게 하듯 하지 말라', r:'골 3:23'},
+ {t:'그런즉 너희가 먹든지 마시든지 무엇을 하든지 다 하나님의 영광을 위하여 하라', r:'고전 10:31'},
+ {t:'항상 기뻐하라 쉬지 말고 기도하라 범사에 감사하라 이는 그리스도 예수 안에서 너희를 향하신 하나님의 뜻이니라', r:'살전 5:16-18'},
 ];
 const IDENT = [
  {b:'하나님의 주권', p:'세상과 내 삶의 모든 일이 하나님의 다스림 아래 있다. 그래서 내일을 염려하는 대신 오늘 순종한다.', r:'시 103:19, 롬 11:36'},
@@ -429,37 +523,83 @@ const WSC = [
 // ---------- state ----------
 const KEY='altar-v1';
 let S={days:{}, topics:[], todos:[], qa:{idx:0,done:{}}, updatedAt:0};
+const DEFAULT_DDAY='2026-11-19';
 try{ const raw=localStorage.getItem(KEY); if(raw) S=Object.assign(S,JSON.parse(raw)); }catch(e){}
 S.qa=S.qa||{idx:0,done:{}};
+function normalize(){
+  S.days=S.days||{}; S.topics=S.topics||[]; S.todos=S.todos||[]; S.qa=S.qa||{idx:0,done:{}};
+  S.ideas=S.ideas||[]; S.myVerses=S.myVerses||[]; if(S.dday===undefined) S.dday=DEFAULT_DDAY;
+  if(!S.props){
+    S.props={seq:0,items:[]};
+    // 따로 쓰던 「인생 제안서」 앱의 기록이 이 기기에 있으면 가져온다
+    try{ const o=JSON.parse(localStorage.getItem('life-proposals-v1')||'null'); if(o&&Array.isArray(o.items)){ S.props.seq=+o.seq||o.items.length; S.props.items=o.items.filter(x=>x&&x.title).map(x=>({id:String(x.id),no:String(x.no||''),title:String(x.title),background:String(x.background||''),category:String(x.category||''),status:['active','review','dropped'].includes(x.status)?x.status:'active',pinned:!!x.pinned,createdAt:+x.createdAt||Date.now(),updatedAt:+x.updatedAt||Date.now(),rev:+x.rev||0})); } }catch(e){}
+    if(!S.props.items.length){ const now=Date.now(); S.props.seq=1; S.props.items=[{id:'p'+now,no:new Date().getFullYear()+'-001',title:'당근마켓에서 거래하지 말고 쿠팡에서 새 상품을 사자',background:"(예시) 이 결론을 얻게 된 일을 여기에 적어 둔다. 눌러서 '수정'으로 내 이야기로 바꾸거나 지워도 된다.",category:'소비',status:'active',pinned:false,createdAt:now,updatedAt:now,rev:0}]; }
+  }
+}
+normalize();
 function persist(){ S.updatedAt=Date.now(); try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){} }
 const day = k => { k=k||todayKey(); S.days[k]=S.days[k]||{}; return S.days[k]; };
 S.todos.forEach(t=>{ if(t.done && t.doneDay!==todayKey()) t.archived=true; });
 
 // ---------- tabs ----------
-function showTab(k){ document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===k)); document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id==='p-'+k)); window.scrollTo({top:0}); }
+function showTab(k){ document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===k)); document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id==='p-'+k)); window.scrollTo({top:0}); if(k==='aff'){ const p=$('affPick'), on=p.querySelector('.on'); if(on) p.scrollLeft=on.offsetLeft-p.clientWidth/2; } }
 document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>showTab(b.dataset.go));
 
-// ---------- recorder ----------
+// ---------- 받아쓰기 (음성 → 글. 소리 파일은 저장하지 않는다) ----------
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-function makeRecorder(cfg){
-  let rec=null, listening=false, media=null, chunks=[], heard='';
-  cfg.tx.addEventListener('focus',()=>{ if(cfg.tx.classList.contains('empty')){ cfg.tx.textContent=''; cfg.tx.classList.remove('empty'); } cfg.save.disabled=false; });
-  if(!SR||!navigator.onLine){ cfg.hint.textContent=navigator.onLine?'이 브라우저는 음성인식을 지원하지 않는다. 직접 적어서 저장하자.':'오프라인이라 받아쓰기는 안 된다. 녹음은 되고, 글은 직접 적어 저장하자.'; }
-  async function start(){
-    heard=''; cfg.tx.textContent=''; cfg.tx.classList.remove('empty'); cfg.audio.hidden=true; cfg.audio.innerHTML='';
-    try{ const stream=await navigator.mediaDevices.getUserMedia({audio:true}); const mime=['audio/mp4','audio/webm;codecs=opus','audio/webm'].find(m=>window.MediaRecorder&&MediaRecorder.isTypeSupported(m))||''; media=new MediaRecorder(stream, mime?{mimeType:mime}:undefined); chunks=[]; media.ondataavailable=e=>chunks.push(e.data); media.onstop=()=>{ stream.getTracks().forEach(t=>t.stop()); const blob=new Blob(chunks,{type:media.mimeType}); const url=URL.createObjectURL(blob); cfg.audio.hidden=false; cfg.audio.innerHTML='<span>다시 듣기</span><audio controls src="'+url+'"></audio>'; }; media.start(); }catch(e){ media=null; cfg.hint.textContent='마이크 권한이 필요하다.'; return; }
-    if(SR&&navigator.onLine){ rec=new SR(); rec.lang='ko-KR'; rec.continuous=true; rec.interimResults=true;
-      rec.onresult=e=>{ let fin='',interim=''; for(let i=0;i<e.results.length;i++){ const r=e.results[i]; if(r.isFinal) fin+=r[0].transcript+' '; else interim+=r[0].transcript; } heard=fin+interim; cfg.tx.textContent=heard; };
-      rec.onerror=e=>{ cfg.hint.textContent='음성인식 오류: '+e.error+' — 녹음은 계속된다.'; };
-      try{ rec.start(); }catch(e){} }
-    listening=true; ui(); cfg.hint.textContent=(SR&&navigator.onLine)?'듣고 있다… 끝나면 버튼을 다시 누르자.':'녹음 중 (오프라인: 글은 직접 적는다)';
+let activeDict=null;
+function dictation(cfg){
+  let st=null;
+  const btn=()=>cfg.btnGet?cfg.btnGet():cfg.btn;
+  const say=m=>{ if(cfg.hint) cfg.hint.textContent=m; };
+  const ui=on=>{ const b=btn(); if(!b) return; b.classList.toggle('on',on); b.textContent=cfg.labels[on?1:0]; };
+  function begin(me){
+    const sr=new SR(); me.sr=sr; sr.lang='ko-KR'; sr.continuous=true; sr.interimResults=true;
+    me.prefix=cfg.get(); me.last=me.prefix; me.skip=0;
+    // 결과 전체로 매번 다시 조립한다 — 기기마다 다른 중복 전달을 피하고, 중간에 직접 고친 글은 그대로 둔다.
+    sr.onresult=e=>{
+      if(cfg.get()!==me.last){ me.prefix=cfg.get(); me.skip=e.resultIndex; }
+      let t=''; for(let i=me.skip;i<e.results.length;i++) t+=e.results[i][0].transcript+' ';
+      t=t.replace(/\s+/g,' ').trim();
+      const sep=(me.prefix&&t&&!/\s$/.test(me.prefix))?' ':'';
+      me.last=me.prefix+sep+t; cfg.set(me.last);
+    };
+    sr.onerror=e=>{
+      if(['not-allowed','service-not-allowed','network','audio-capture','language-not-supported'].includes(e.error)){
+        me.dead=true; me.err=true;
+        say(e.error==='network'?'인터넷이 없어 받아쓰기가 안 된다. 키보드의 마이크 버튼(받아쓰기)이나 타이핑으로 적자.'
+          :(e.error==='not-allowed'||e.error==='service-not-allowed')?'마이크·음성인식 권한이 필요하다. (아이폰 설정에서 마이크, Siri 및 받아쓰기 허용)'
+          :'지금은 받아쓰기를 쓸 수 없다. 직접 적자.');
+      }
+    };
+    sr.onend=()=>{ if(me.want&&!me.dead){ try{ begin(me); return; }catch(err){} } finish(me); };
+    sr.start();
   }
-  function stop(){ if(rec){ try{rec.stop();}catch(e){} rec=null; } if(media&&media.state==='recording') media.stop(); listening=false; ui(); cfg.save.disabled=false; cfg.hint.textContent= heard.trim()?'받아 적었다. 틀린 글자는 눌러서 고치고 저장.':'글을 직접 적고 저장을 누르자.'; }
-  function ui(){ cfg.btn.classList.toggle('on',listening); cfg.btn.textContent=listening?'■ 다 했다 (멈춤)':cfg.label; }
-  cfg.btn.onclick=()=>listening?stop():start();
-  cfg.save.onclick=()=>{ const text=cfg.tx.textContent.trim(); if(!text||cfg.tx.classList.contains('empty')) return; cfg.onDone(text); cfg.save.disabled=true; };
-  ui();
+  function finish(me){ if(me.finished) return; me.finished=true; if(st===me) st=null; if(activeDict===api) activeDict=null; ui(false); if(cfg.onStop) cfg.onStop(!!me.err); }
+  const api={
+    active:()=>!!st,
+    start(){
+      if(!SR){ say('이 브라우저는 음성인식을 지원하지 않는다. 직접 적자.'); return false; }
+      if(activeDict&&activeDict!==api) activeDict.stop();
+      const me=st={want:true}; activeDict=api; ui(true); say('듣고 있다… 끝나면 버튼을 다시 누르자.');
+      try{ begin(me); }catch(e){ me.err=true; say('받아쓰기를 시작하지 못했다. 직접 적자.'); finish(me); return false; }
+      return true;
+    },
+    stop(){ if(!st||st.stopping) return; const me=st; me.want=false; me.stopping=true; ui(false); try{ me.sr.stop(); }catch(e){} setTimeout(()=>finish(me),1500); },
+    toggle(){ st?api.stop():api.start(); }
+  };
+  return api;
+}
+function micFor(btn,input,hint,onStop){ const d=dictation({btn,labels:['🎙','■'],hint,get:()=>input.value,set:v=>{input.value=v;},onStop}); btn.onclick=()=>d.toggle(); return d; }
+function makeRecorder(cfg){
+  const tx=cfg.tx, get=()=>tx.classList.contains('empty')?'':tx.textContent;
+  tx.addEventListener('focus',()=>{ if(tx.classList.contains('empty')){ tx.textContent=''; tx.classList.remove('empty'); } cfg.save.disabled=false; });
+  if(!SR) cfg.hint.textContent='이 브라우저는 음성인식을 지원하지 않는다. 직접 적어서 저장하자.';
+  const d=dictation({btn:cfg.btn,labels:[cfg.label,'■ 다 했다 (멈춤)'],hint:cfg.hint,get,set:v=>{ tx.classList.remove('empty'); tx.textContent=v; },
+    onStop:err=>{ cfg.save.disabled=false; if(!err) cfg.hint.textContent=get().trim()?'받아 적었다. 틀린 글자는 눌러서 고치고 저장.':'글을 직접 적고 저장을 누르자.'; }});
+  cfg.btn.onclick=()=>d.toggle();
+  cfg.save.onclick=()=>{ if(d.active()) d.stop(); const text=get().trim(); if(!text) return; cfg.onDone(text); cfg.save.disabled=true; };
 }
 
 // ---------- flow / modes ----------
@@ -467,15 +607,46 @@ let mode='full';
 document.querySelectorAll('.mode button').forEach(b=>b.onclick=()=>{ mode=b.dataset.mode; document.querySelectorAll('.mode button').forEach(x=>x.classList.toggle('on',x===b)); renderToday(); });
 function seededShuffle(arr, seed){ const a=arr.slice(); let s=seed; for(let i=a.length-1;i>0;i--){ s=(s*9301+49297)%233280; const j=Math.floor(s/233280*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 
-// ---------- affirmation ----------
-let affIdx=(new Date().getDate()+new Date().getMonth())%AFF.length;
-function renderAff(){ const d=day(); $('affDate').textContent=todayKey(); $('affPick').innerHTML=AFF.map((a,i)=>`<button class="${i===affIdx?'on':''}" data-i="${i}">${i+1}</button>`).join(''); const t=AFF[affIdx].t+'<span class="ref">'+AFF[affIdx].r+'</span>'; $('affText').innerHTML=t; $('homeAff').innerHTML=t; $('affSaved').textContent=d.aff?'✓ 오늘 고백 저장됨 · '+d.aff.slice(0,40)+(d.aff.length>40?'…':''):''; }
+// ---------- 말씀 고백 ----------
+const allWords=()=>WORD.concat(S.myVerses.map(v=>({t:v.t,r:v.r,mine:v.id})));
+let affIdx=(new Date().getDate()-1)%WORD.length;
+function renderAff(){
+  const d=day(), W=allWords(); if(affIdx>=W.length) affIdx=0; const w=W[affIdx];
+  $('affDate').textContent=todayKey();
+  $('affPick').innerHTML=W.map((a,i)=>`<button class="${i===affIdx?'on':''}" data-i="${i}">${a.mine?'내 '+(i-WORD.length+1):(i+1)}</button>`).join('');
+  const t=esc(w.t)+'<span class="ref">'+esc(w.r)+(w.mine?' · 내가 넣은 구절':' · 개역한글')+'</span>';
+  $('affText').innerHTML=t; $('homeAff').innerHTML=t; $('vDel').hidden=!w.mine;
+  $('affRead').textContent=d.wordRead?'✓ 소리 내어 읽었다':'① 소리 내어 읽었다'; $('affRead').classList.toggle('primary',!d.wordRead);
+  $('affSaved').textContent=d.aff?'✓ 오늘 고백 저장됨 · '+d.aff.slice(0,40)+(d.aff.length>40?'…':''):'';
+}
 $('affPick').onclick=e=>{ const b=e.target.closest('button[data-i]'); if(b){ affIdx=+b.dataset.i; renderAff(); } };
-$('shuffleAff').onclick=()=>{ affIdx=(affIdx+1+Math.floor(Math.random()*(AFF.length-1)))%AFF.length; renderAff(); };
-makeRecorder({btn:$('affRec'), hint:$('affHint'), tx:$('affTx'), audio:$('affAudio'), save:$('affSave'), label:'● 녹음하며 고백하기', onDone:text=>{ const d=day(); d.aff=text; d.affRef=($('affCustom').value.trim()?'내 말로':'확언 '+(affIdx+1)); persist(); render(); }});
-// gratitude
-function renderGrat(){ const d=day(); const g=d.grat||['','','']; $('grat').innerHTML=[0,1,2].map(i=>`<div class="no"><span>${i+1}.</span><input type="text" data-g="${i}" value="${esc(g[i]||'')}" placeholder="${['오늘 아침에 눈뜬 것','어제 도와준 사람','아직 안 온 응답이지만…'][i]}" maxlength="80"></div>`).join(''); $('gratSaved').textContent=(g.filter(x=>x).length===3)?'✓ 감사 세 가지 기록됨':''; }
-$('grat').addEventListener('change',e=>{ const i=+e.target.dataset.g; const d=day(); d.grat=d.grat||['','','']; d.grat[i]=e.target.value.trim(); persist(); render(); });
+$('shuffleAff').onclick=()=>{ const n=allWords().length; affIdx=(affIdx+1+Math.floor(Math.random()*(n-1)))%n; renderAff(); };
+$('affRead').onclick=()=>{ const d=day(); d.wordRead=!d.wordRead; persist(); render(); };
+$('vAddToggle').onclick=()=>{ $('vAddBox').hidden=!$('vAddBox').hidden; };
+$('vAdd').onclick=()=>{ const t=$('vNewT').value.trim(), r=$('vNewR').value.trim(); if(!t) return; S.myVerses.push({id:Math.random().toString(36).slice(2,9),t,r:r||'내 구절'}); $('vNewT').value=''; $('vNewR').value=''; $('vAddBox').hidden=true; affIdx=allWords().length-1; persist(); render(); };
+$('vDel').onclick=()=>{ const w=allWords()[affIdx]; if(!w||!w.mine) return; S.myVerses=S.myVerses.filter(v=>v.id!==w.mine); affIdx=(new Date().getDate()-1)%WORD.length; persist(); render(); };
+makeRecorder({btn:$('affRec'), hint:$('affHint'), tx:$('affTx'), save:$('affSave'), label:'● 말로 고백하기', onDone:text=>{ const d=day(); d.aff=text; d.affRef=allWords()[affIdx].r; d.wordRead=true; persist(); render(); }});
+
+// ---------- 오늘의 잠언 (날짜 = 장) ----------
+function renderProv(){ const d=day(); $('provMeta').textContent='잠언 '+new Date().getDate()+'장'; if(document.activeElement!==$('provNote')&&!provDict.active()) $('provNote').value=d.provNote||''; $('provDone').textContent=d.prov?'✓ 오늘 '+new Date().getDate()+'장 읽음':'읽었다'; $('provDone').classList.toggle('primary',!d.prov); }
+function saveProvNote(){ const d=day(); d.provNote=$('provNote').value.trim(); if(d.provNote) d.prov=true; persist(); render(); }
+const provDict=micFor($('provMic'),$('provNote'),$('provHint'),err=>{ if(!err) $('provHint').textContent=''; saveProvNote(); });
+$('provNote').addEventListener('change',saveProvNote);
+$('provDone').onclick=()=>{ const d=day(); d.prov=!d.prov; persist(); render(); };
+
+// ---------- 감사 세 가지 (말로도 적는다) ----------
+let gratCur=null;
+function renderGrat(){ if(gratCur) return; const d=day(); const g=d.grat||['','','']; $('grat').innerHTML=[0,1,2].map(i=>`<div class="no"><span>${i+1}.</span><input type="text" data-g="${i}" value="${esc(g[i]||'')}" placeholder="${['오늘 아침에 눈뜬 것','어제 도와준 사람','아직 안 온 응답이지만…'][i]}" maxlength="120"><button class="mic" data-gm="${i}">🎙</button></div>`).join(''); $('gratSaved').textContent=(g.filter(x=>x).length===3)?'✓ 감사 세 가지 기록됨':''; }
+function saveGrat(i){ const el=$('grat').querySelector('[data-g="'+i+'"]'); if(!el) return; const d=day(); d.grat=d.grat||['','','']; d.grat[i]=el.value.trim(); persist(); }
+$('grat').addEventListener('change',e=>{ if(e.target.dataset.g===undefined) return; saveGrat(+e.target.dataset.g); render(); });
+$('grat').addEventListener('click',e=>{
+  const b=e.target.closest('[data-gm]'); if(!b) return; const i=+b.dataset.gm;
+  if(gratCur&&gratCur.i===i){ gratCur.d.stop(); return; }
+  const q=sel=>$('grat').querySelector(sel);
+  const d=dictation({btnGet:()=>q('[data-gm="'+i+'"]'),labels:['🎙','■'],hint:$('gratHint'),get:()=>q('[data-g="'+i+'"]').value,set:v=>{ q('[data-g="'+i+'"]').value=v; },
+    onStop:err=>{ saveGrat(i); if(gratCur&&gratCur.i===i){ gratCur=null; if(!err) $('gratHint').textContent=''; } render(); }});
+  const cur={i,d}; gratCur=cur; if(!d.start()&&gratCur===cur) gratCur=null;
+});
 
 // ---------- think ----------
 let thinkIdx=(new Date().getDate()*3+new Date().getMonth())%THINK.length;
@@ -498,7 +669,7 @@ function daysSince(mmdd){ const y=new Date().getFullYear(); const d=new Date(y+'
 $('tpAdd').onclick=()=>{ const t=$('tpNew').value.trim(); if(!t) return; S.topics.unshift({id:Math.random().toString(36).slice(2,9), cat:$('tpCat').value, t, since:todayKey().slice(5), answered:''}); $('tpNew').value=''; persist(); render(); };
 $('tpNew').addEventListener('keydown',e=>{ if(e.key==='Enter') $('tpAdd').click(); });
 $('myTopics').onclick=e=>{ const a=e.target.closest('[data-ans]'), d=e.target.closest('[data-del]'); if(a){ const t=S.topics.find(x=>x.id===a.dataset.ans); if(t){ t.answered=todayKey().slice(5); persist(); render(); } } if(d){ S.topics=S.topics.filter(x=>x.id!==d.dataset.del); persist(); render(); } };
-makeRecorder({btn:$('prayRec'), hint:$('prayHint'), tx:$('prayTx'), audio:$('prayAudio'), save:$('praySave'), label:'● 녹음하며 기도하기', onDone:text=>{ const d=day(); d.pray=(d.pray?d.pray+'\n\n':'')+text; persist(); render(); }});
+makeRecorder({btn:$('prayRec'), hint:$('prayHint'), tx:$('prayTx'), save:$('praySave'), label:'● 말하며 기도하기', onDone:text=>{ const d=day(); d.pray=(d.pray?d.pray+'\n\n':'')+text; persist(); render(); }});
 // silence timer
 let silLen=300, silLeft=0, silT=null;
 document.querySelectorAll('[data-sil]').forEach(b=>b.onclick=()=>{ silLen=+b.dataset.sil; silLeft=0; clearInterval(silT); silT=null; $('silT').textContent=fmtT(silLen); $('silStart').textContent='시작'; });
@@ -531,21 +702,92 @@ function addTodo(){ const t=$('tdNew').value.trim(); if(!t) return; S.todos.unsh
 $('tdAdd').onclick=addTodo; $('tdNew').addEventListener('keydown',e=>{ if(e.key==='Enter') addTodo(); });
 document.addEventListener('click',e=>{ const b=e.target.closest('[data-act]'); if(!b) return; const el=b.closest('.td'); const t=S.todos.find(x=>x.id===el.dataset.id); if(!t) return; if(b.dataset.act==='tog'){ t.done=!t.done; t.doneDay=t.done?todayKey():''; const d=day(); d.todo=Math.max(0,(d.todo||0)+(t.done?1:-1)); } if(b.dataset.act==='star') t.star=!t.star; if(b.dataset.act==='del') S.todos=S.todos.filter(x=>x!==t); persist(); render(); });
 
+// ---------- 아이디어 보관함 ----------
+function renderIdeas(){
+  $('ideaMeta').textContent=S.ideas.length?S.ideas.length+'개 보관 중':'';
+  $('ideas').innerHTML=S.ideas.length?S.ideas.map(x=>`<div class="tp" style="grid-template-columns:auto 1fr" data-idea="${x.id}"><span class="cat">${x.d.slice(5)}</span><span class="t">${esc(x.t)}<div style="margin-top:4px"><button class="ans" data-ia="todo">할 일로</button> <button class="ans" data-ia="prop">제안서로</button> <button class="ans" data-ia="del">버리기</button></div></span></div>`).join(''):'<div class="empty">비어 있다. 머리가 가벼운 상태.</div>';
+}
+function addIdea(){ const t=$('ideaNew').value.trim(); if(!t) return; S.ideas.unshift({id:Math.random().toString(36).slice(2,9),t,d:todayKey()}); $('ideaNew').value=''; persist(); render(); }
+const ideaDict=micFor($('ideaMic'),$('ideaNew'),$('ideaHint'),err=>{ if(!err){ $('ideaHint').textContent=''; addIdea(); } });
+$('ideaAdd').onclick=()=>{ if(ideaDict.active()) ideaDict.stop(); else addIdea(); };
+$('ideaNew').addEventListener('keydown',e=>{ if(e.key==='Enter') addIdea(); });
+$('ideas').onclick=e=>{ const b=e.target.closest('[data-ia]'); if(!b) return; const id=b.closest('[data-idea]').dataset.idea; const x=S.ideas.find(v=>v.id===id); if(!x) return;
+  if(b.dataset.ia==='prop'){ openPropEditor(null,x.t,id); showTab('prop'); return; }
+  if(b.dataset.ia==='todo') S.todos.unshift({id:Math.random().toString(36).slice(2,9), t:x.t, done:false, star:false, created:todayKey()});
+  S.ideas=S.ideas.filter(v=>v.id!==id); persist(); render(); };
+
+// ---------- 인생 제안서 ----------
+const PST={active:['채택','시행 중'],review:['검토','검토 중'],dropped:['폐기','폐기']}, PORDER={active:0,review:1,dropped:2};
+const PCATS=['소비','공부','관계','건강','신앙','습관','시간','말'];
+let propFilter='전체', propOpen={}, peId=null, peStatus='active', peDelArmed=false, peIdea=null, homePropId=null;
+const pad3=n=>String(n).padStart(3,'0');
+const propCats=()=>[...new Set(S.props.items.map(x=>x.category||'미분류'))];
+function renderProps(){
+  const items=S.props.items, cnt=k=>items.filter(x=>x.status===k).length;
+  $('propMeta').textContent=items.length?'시행 '+cnt('active')+' · 검토 '+cnt('review')+(cnt('dropped')?' · 폐기 '+cnt('dropped'):''):'';
+  const cats=['전체',...propCats()]; if(!cats.includes(propFilter)) propFilter='전체';
+  $('propChips').innerHTML=cats.length>2?cats.map(c=>`<button class="${c===propFilter?'on':''}" data-pc="${esc(c)}">${esc(c)}</button>`).join(''):'';
+  const q=($('propSearch').value||'').trim().toLowerCase();
+  const shown=items.filter(x=>(propFilter==='전체'||(x.category||'미분류')===propFilter)&&(!q||(x.title+' '+x.background+' '+x.category).toLowerCase().includes(q)))
+    .sort((a,b)=>(!!b.pinned-!!a.pinned)||(PORDER[a.status]-PORDER[b.status])||(b.createdAt-a.createdAt));
+  $('propList').innerHTML=shown.length?shown.map(x=>{ const open=!!propOpen[x.id]; return `<div class="day pdoc ${open?'open':''} ${x.status}" data-pid="${x.id}"><div class="dt"><span>제 ${esc(x.no)}호 · ${esc(x.category||'미분류')}${x.pinned?' · <span class="key">핵심</span>':''}</span><span class="pstamp ${x.status}">${PST[x.status][0]}</span></div><div class="ptitle">${esc(x.title)}</div>${x.background?'<div class="pbg">'+esc(x.background)+'</div>':''}${open?`<div class="pfoot"><span class="hint" style="margin:0;min-height:0">기안 ${fmtK(new Date(x.createdAt))}${x.rev?' · 개정 '+x.rev+'회':''}</span><button class="btn small" data-pedit="${x.id}">수정</button></div>`:''}</div>`; }).join('')
+    :'<div class="empty">'+(items.length?'조건에 맞는 제안이 없다.':'살면서 얻은 교훈을 첫 제안서로 남겨 보자.')+'</div>';
+  // 오늘 탭: 다시 읽을 제안
+  const pool=items.filter(x=>x.status==='active'); $('homePropSheet').hidden=!pool.length;
+  if(pool.length){ let cur=pool.find(x=>x.id===homePropId); if(!cur){ const n=new Date(); cur=pool[(n.getDate()+n.getMonth()*31)%pool.length]; homePropId=cur.id; } $('homeProp').textContent=cur.title; $('homePropBg').textContent=cur.background||''; $('homePropNext').hidden=pool.length<2; }
+}
+$('homePropNext').onclick=()=>{ const pool=S.props.items.filter(x=>x.status==='active'); const i=pool.findIndex(x=>x.id===homePropId); homePropId=pool[(i+1)%pool.length].id; renderProps(); };
+$('propChips').onclick=e=>{ const b=e.target.closest('[data-pc]'); if(b){ propFilter=b.dataset.pc; renderProps(); } };
+$('propSearch').addEventListener('input',renderProps);
+$('propList').onclick=e=>{ const ed=e.target.closest('[data-pedit]'); if(ed){ openPropEditor(ed.dataset.pedit); return; } const c=e.target.closest('[data-pid]'); if(!c) return; const id=c.dataset.pid; if(propOpen[id]) delete propOpen[id]; else propOpen[id]=1; renderProps(); };
+function setPeStatus(k){ peStatus=k; $('peStatus').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.st===k)); }
+$('peStatus').onclick=e=>{ const b=e.target.closest('[data-st]'); if(b) setPeStatus(b.dataset.st); };
+function openPropEditor(id,preTitle,ideaId){
+  const x=id?S.props.items.find(v=>v.id===id):null; peId=x?x.id:null; peIdea=ideaId||null; peDelArmed=false;
+  $('peTitle').textContent=x?'개정':'기안'; $('peNo').textContent='제 '+(x?x.no:new Date().getFullYear()+'-'+pad3(S.props.seq+1))+'호';
+  $('peT').value=x?x.title:(preTitle||''); $('peB').value=x?x.background:''; $('peC').value=x?x.category:(propFilter!=='전체'&&propFilter!=='미분류'?propFilter:'');
+  setPeStatus(x?x.status:'active'); $('pePin').checked=!!(x&&x.pinned); $('peDel').hidden=!x; $('peDel').textContent='삭제';
+  $('peCats').innerHTML=[...new Set([...propCats().filter(c=>c!=='미분류'),...PCATS])].map(c=>`<option value="${esc(c)}">`).join('');
+  $('peHint').textContent='🎙을 누르고 말하면 글로 받아 적는다. 글은 언제든 직접 고칠 수 있다.';
+  $('propEditor').hidden=false; window.scrollTo({top:0});
+}
+function closePropEditor(){ if(activeDict) activeDict.stop(); $('propEditor').hidden=true; peId=null; peIdea=null; }
+micFor($('peTMic'),$('peT'),$('peHint'),err=>{ if(!err) $('peHint').textContent='받아 적었다. 틀린 글자는 고치고 저장.'; });
+micFor($('peBMic'),$('peB'),$('peHint'),err=>{ if(!err) $('peHint').textContent='받아 적었다. 틀린 글자는 고치고 저장.'; });
+$('propNew').onclick=()=>openPropEditor(null);
+$('peCancel').onclick=()=>{ closePropEditor(); };
+$('peSave').onclick=()=>{
+  const save=()=>{
+    const title=$('peT').value.trim(); if(!title){ $('peHint').textContent='제안 내용을 한 줄이라도 적자.'; $('peT').focus(); return; }
+    const data={title,background:$('peB').value.trim(),category:$('peC').value.trim(),status:peStatus,pinned:$('pePin').checked}, now=Date.now();
+    if(peId){ const x=S.props.items.find(v=>v.id===peId); if(x.title!==data.title||x.background!==data.background){ x.rev=(x.rev||0)+1; x.updatedAt=now; } Object.assign(x,data); }
+    else{ S.props.seq+=1; const id='p'+now+Math.floor(Math.random()*1000); S.props.items.push(Object.assign(data,{id,no:new Date().getFullYear()+'-'+pad3(S.props.seq),createdAt:now,updatedAt:now,rev:0})); propOpen[id]=1; propFilter='전체'; if(peIdea) S.ideas=S.ideas.filter(v=>v.id!==peIdea); }
+    closePropEditor(); persist(); render();
+  };
+  if(activeDict){ activeDict.stop(); setTimeout(save,1700); } else save();   // 받아쓰던 마지막 말까지 들어온 뒤 저장
+};
+$('peDel').onclick=()=>{ if(!peDelArmed){ peDelArmed=true; $('peDel').textContent='정말 삭제 (되돌릴 수 없음)'; return; } S.props.items=S.props.items.filter(v=>v.id!==peId); closePropEditor(); persist(); render(); };
+
+// ---------- 수능 D-day ----------
+function renderDday(){ const w=$('stDdayWrap'); if(document.activeElement!==$('ddayIn')) $('ddayIn').value=S.dday||''; if(!S.dday){ w.hidden=true; return; } const n=Math.round((new Date(S.dday+'T00:00:00')-new Date(todayKey()+'T00:00:00'))/86400000); if(isNaN(n)){ w.hidden=true; return; } w.hidden=false; $('stDday').textContent=n>0?'D-'+n:n===0?'D-DAY':'D+'+(-n); }
+$('ddayIn').addEventListener('change',e=>{ S.dday=e.target.value||''; persist(); renderDday(); });
+
 // ---------- today / records ----------
 function renderToday(){
   const d=day(); const nowD=new Date();
   $('topDate').textContent=nowD.toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric',weekday:'long'});
   $('topVerse').textContent=VERSES[nowD.getDay()];
   let items=[
-    {n:'一',t:'확언 · 소리 내어 고백',s:d.aff?'저장됨':'오늘의 확언',done:!!d.aff,go:'aff'},
-    {n:'二',t:'감사 세 가지',s:(d.grat||[]).filter(x=>x).length+'/3',done:(d.grat||[]).filter(x=>x).length===3,go:'aff'},
-    {n:'三',t:'기도 · 녹음하며',s:d.pray?'저장됨':'추천 제목 3가지',done:!!d.pray,go:'pray'},
-    {n:'四',t:'침묵 기도',s:d.silence?Math.round(d.silence/60)+'분':'3~10분',done:!!d.silence,go:'pray'},
-    {n:'五',t:'소요리문답 한 문',s:d.qa?'외움':'답 가리고 말해 보기',done:!!d.qa,go:'creed'},
-    {n:'六',t:'주기도문 · 사도신경',s:(d.lp||d.ac)?'읽음':'고백문 한 번',done:!!(d.lp||d.ac),go:'creed'},
-    {n:'七',t:'오늘의 질문에 답하기',s:(d.think&&d.think.a)?'적음':'한두 문장',done:!!(d.think&&d.think.a),go:'today'},
-    {n:'八',t:'오늘의 할 일 셋 정하기',s:activeTodos().filter(t=>t.star).length+'개 ★',done:activeTodos().filter(t=>t.star).length>=1,go:'todo'}];
-  if(mode==='quick') items=items.filter(i=>['一','三','八'].includes(i.n));
+    {n:'一',t:'말씀 · 소리 내어 읽고 고백',s:d.aff?'저장됨':(d.wordRead?'읽음 · 고백 남음':'오늘의 말씀'),done:!!d.aff,go:'aff'},
+    {n:'二',t:'잠언 '+nowD.getDate()+'장 읽기',s:d.prov?'읽음':'날짜 = 장',done:!!d.prov,go:'aff'},
+    {n:'三',t:'감사 세 가지',s:(d.grat||[]).filter(x=>x).length+'/3',done:(d.grat||[]).filter(x=>x).length===3,go:'aff'},
+    {n:'四',t:'기도 · 말하며',s:d.pray?'저장됨':'추천 제목 3가지',done:!!d.pray,go:'pray'},
+    {n:'五',t:'침묵 기도',s:d.silence?Math.round(d.silence/60)+'분':'3~10분',done:!!d.silence,go:'pray'},
+    {n:'六',t:'소요리문답 한 문',s:d.qa?'외움':'답 가리고 말해 보기',done:!!d.qa,go:'creed'},
+    {n:'七',t:'주기도문 · 사도신경',s:(d.lp||d.ac)?'읽음':'고백문 한 번',done:!!(d.lp||d.ac),go:'creed'},
+    {n:'八',t:'오늘의 질문에 답하기',s:(d.think&&d.think.a)?'적음':'한두 문장',done:!!(d.think&&d.think.a),go:'today'},
+    {n:'九',t:'오늘의 할 일 셋 정하기',s:activeTodos().filter(t=>t.star).length+'개 ★',done:activeTodos().filter(t=>t.star).length>=1,go:'todo'}];
+  if(mode==='quick') items=items.filter(i=>['一','四','九'].includes(i.n));
   if(mode==='random') items=seededShuffle(items, nowD.getDate()*31+nowD.getMonth());
   $('flow').innerHTML=items.map(i=>`<div class="fi ${i.done?'done':''}"><div class="n">${i.n}</div><div><div class="t">${i.t}</div><div class="s">${i.s}</div></div><button class="go" data-go="${i.go}">${i.done?'보기':'하기'}</button></div>`).join('');
   $('flow').querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>showTab(b.dataset.go));
@@ -567,18 +809,36 @@ function renderRec(){
   $('review').innerHTML=`<div><b>${n(x=>x.aff)}</b>고백한 날</div><div><b>${n(x=>x.pray)}</b>기도한 날</div><div><b>${wk.reduce((a,x)=>a+(x.todo||0),0)}</b>끝낸 할 일</div><div><b>${Math.round(wk.reduce((a,x)=>a+(x.silence||0),0)/60)}분</b>침묵 기도</div><div><b>${S.topics.filter(t=>t.answered&&daysSince(t.answered)<=7).length}</b>이번 주 응답</div><div><b>${n(x=>x.qa)}</b>문답 외운 날</div>`;
   const best=n(x=>x.aff&&x.pray); $('reviewNote').textContent= best>=6?'거의 매일 제단을 쌓았다. 다음 주엔 침묵 기도 시간을 늘려 보자.': best>=3?'절반 이상. 빠진 날의 공통점이 있나? (요일·전날 밤)': '이번 주는 드물었다. 속성 모드(3분)로라도 매일 한 번.';
   const q=($('search').value||'').trim();
-  const keys=Object.keys(S.days).filter(k=>S.days[k].aff||S.days[k].pray||(S.days[k].grat||[]).some(Boolean)||(S.days[k].think&&S.days[k].think.a)).sort().reverse().filter(k=>{ const x=S.days[k]; return !q||((x.aff||'')+(x.pray||'')+(x.grat||[]).join(' ')+((x.think&&x.think.a)||'')).includes(q); }).slice(0,60);
-  $('arch').innerHTML=keys.length?keys.map(k=>{ const x=S.days[k]; return `<div class="day"><div class="dt"><span>${k}</span><span>${x.todo?'할 일 '+x.todo+'개':''}${x.silence?' · 침묵 '+Math.round(x.silence/60)+'분':''}${x.lp||x.ac?' · 고백문':''}</span></div>${x.aff?'<div class="lbl">고백 · '+(x.affRef||'')+'</div><div class="tx">'+esc(x.aff)+'</div>':''}${(x.grat||[]).some(Boolean)?'<div class="lbl">감사</div><div class="tx">'+x.grat.filter(Boolean).map(esc).join(' / ')+'</div>':''}${x.pray?'<div class="lbl">기도</div><div class="tx">'+esc(x.pray)+'</div>':''}${(x.think&&x.think.a)?'<div class="lbl">생각 · '+esc(THINK[x.think.q][0])+'</div><div class="tx">'+esc(x.think.a)+'</div>':''}</div>`; }).join(''):'<div class="empty">'+(q?'찾는 말이 없다.':'첫 고백과 기도를 저장하면 여기 쌓인다.')+'</div>';
+  const keys=Object.keys(S.days).filter(k=>S.days[k].aff||S.days[k].pray||S.days[k].provNote||(S.days[k].grat||[]).some(Boolean)||(S.days[k].think&&S.days[k].think.a)).sort().reverse().filter(k=>{ const x=S.days[k]; return !q||((x.aff||'')+(x.provNote||'')+(x.pray||'')+(x.grat||[]).join(' ')+((x.think&&x.think.a)||'')).includes(q); }).slice(0,60);
+  $('arch').innerHTML=keys.length?keys.map(k=>{ const x=S.days[k]; return `<div class="day"><div class="dt"><span>${k}</span><span>${x.todo?'할 일 '+x.todo+'개':''}${x.silence?' · 침묵 '+Math.round(x.silence/60)+'분':''}${x.lp||x.ac?' · 고백문':''}</span></div>${x.aff?'<div class="lbl">고백 · '+(x.affRef||'')+'</div><div class="tx">'+esc(x.aff)+'</div>':''}${x.provNote?'<div class="lbl">잠언 '+(+k.slice(8))+'장</div><div class="tx">'+esc(x.provNote)+'</div>':''}${(x.grat||[]).some(Boolean)?'<div class="lbl">감사</div><div class="tx">'+x.grat.filter(Boolean).map(esc).join(' / ')+'</div>':''}${x.pray?'<div class="lbl">기도</div><div class="tx">'+esc(x.pray)+'</div>':''}${(x.think&&x.think.a)?'<div class="lbl">생각 · '+esc(THINK[x.think.q][0])+'</div><div class="tx">'+esc(x.think.a)+'</div>':''}</div>`; }).join(''):'<div class="empty">'+(q?'찾는 말이 없다.':'첫 고백과 기도를 저장하면 여기 쌓인다.')+'</div>';
 }
 $('search').addEventListener('input',renderRec);
 // backup
 $('bkCopy').onclick=async()=>{ try{ await navigator.clipboard.writeText(JSON.stringify(S)); $('bkHint').textContent='복사했다. 메모 앱에 붙여 두자.'; }catch(e){ prompt('아래 내용을 복사해 두자', JSON.stringify(S)); } };
-$('bkPaste').onclick=async()=>{ let txt=''; try{ txt=await navigator.clipboard.readText(); }catch(e){ txt=prompt('백업 내용을 붙여넣자')||''; } try{ const o=JSON.parse(txt); if(!o.days) throw 0; if(!confirm('현재 기록을 붙여넣은 기록으로 바꿀까?')) return; S=Object.assign({days:{},topics:[],todos:[],qa:{idx:0,done:{}}},o); persist(); render(); $('bkHint').textContent='복원했다.'; }catch(e){ $('bkHint').textContent='붙여넣은 내용이 백업 형식이 아니다.'; } };
-function render(){ renderToday(); renderAff(); renderGrat(); renderThink(); renderPray(); renderTodos(); renderQA(); renderRec(); }
+$('bkPaste').onclick=async()=>{ let txt=''; try{ txt=await navigator.clipboard.readText(); }catch(e){ txt=prompt('백업 내용을 붙여넣자')||''; } try{ const o=JSON.parse(txt); if(!o.days) throw 0; if(!confirm('현재 기록을 붙여넣은 기록으로 바꿀까?')) return; S=Object.assign({days:{},topics:[],todos:[],qa:{idx:0,done:{}}},o); normalize(); persist(); render(); $('bkHint').textContent='복원했다.'; }catch(e){ $('bkHint').textContent='붙여넣은 내용이 백업 형식이 아니다.'; } };
+function render(){ renderToday(); renderDday(); renderAff(); renderProv(); renderGrat(); renderIdeas(); renderProps(); renderThink(); renderPray(); renderTodos(); renderQA(); renderRec(); }
 render();
 })();
 </script>
-<script>document.addEventListener("dblclick",e=>{e.preventDefault();},{passive:false});let __lt=0;document.addEventListener("touchend",e=>{const n=Date.now();if(n-__lt<300&&e.target.closest("button")){e.preventDefault();e.target.closest("button").click();}__lt=n;},{passive:false});</script>
+<script>
+/* 아이폰에서 빠르게 두 번 누르면 화면이 확대되는 것을 막는다 (입력칸 안에서는 그대로 둔다) */
+(function(){
+  var last=0, moved=false;
+  document.addEventListener("dblclick",function(e){ e.preventDefault(); },{passive:false});
+  document.addEventListener("touchstart",function(e){ moved=false; if(e.touches.length>1) e.preventDefault(); },{passive:false});
+  document.addEventListener("touchmove",function(){ moved=true; },{passive:true});
+  document.addEventListener("gesturestart",function(e){ e.preventDefault(); },{passive:false});
+  document.addEventListener("touchend",function(e){
+    if(moved) return;
+    var now=Date.now(), quick=now-last<400; last=now;
+    if(!quick) return;
+    var t=e.target;
+    if(t.closest('input,textarea,select,[contenteditable="true"]')) return;
+    e.preventDefault();
+    var c=t.closest("button,label,a,[data-pid]"); if(c) c.click();
+  },{passive:false});
+})();
+</script>
 
 
 
