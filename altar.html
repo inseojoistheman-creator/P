@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f3a5f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="아침 제단">
+<link rel="apple-touch-icon" href="altar-icon-180.png">
+<link rel="manifest" href="altar.webmanifest">
+<title>아침 제단</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap">
+</head>
+<body>
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+img{max-width:100%}[hidden]{display:none!important}
+:root{
+  --bg:#f6f2ea; --surface:#fffdf8; --surface2:#efe9dc; --line:#dcd3c0;
+  --ink:#1f2433; --muted:#5d6272; --faint:#9a9db0;
+  --navy:#1f3a5f; --navy-soft:#dfe6f0; --gold:#b8892b; --gold-soft:#f3e8c9; --wine:#7b2d3b; --wine-soft:#f0dde0; --olive:#4f6b3a; --olive-soft:#e2e9d6;
+  --shadow:0 8px 24px rgba(31,36,51,.08);
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#15181f; --surface:#1d212a; --surface2:#262b36; --line:#363c4a;
+  --ink:#eef0f4; --muted:#b3b9c8; --faint:#737a8c;
+  --navy:#8fb1e0; --navy-soft:#22304a; --gold:#e0b45a; --gold-soft:#3d3419; --wine:#e08a9a; --wine-soft:#442228; --olive:#a3c48a; --olive-soft:#283420;
+  --shadow:0 8px 24px rgba(0,0,0,.4);
+}}
+:root[data-theme="dark"]{
+  --bg:#15181f; --surface:#1d212a; --surface2:#262b36; --line:#363c4a;
+  --ink:#eef0f4; --muted:#b3b9c8; --faint:#737a8c;
+  --navy:#8fb1e0; --navy-soft:#22304a; --gold:#e0b45a; --gold-soft:#3d3419; --wine:#e08a9a; --wine-soft:#442228; --olive:#a3c48a; --olive-soft:#283420;
+  --shadow:0 8px 24px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans KR",-apple-system,system-ui,sans-serif;font-size:16px;line-height:1.65}
+.wrap{max-width:760px;margin:0 auto;padding:16px 16px 100px}
+.serif{font-family:"Nanum Myeongjo","Noto Serif KR",serif}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.top{text-align:center;padding:6px 0 14px}
+.top .date{font-size:12px;letter-spacing:.3em;color:var(--muted);text-transform:uppercase}
+.top h1{margin:2px 0 0;font-size:30px;font-weight:800;letter-spacing:.06em}
+.top .verse{font-size:13.5px;color:var(--muted);font-style:italic;margin-top:4px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px;box-shadow:var(--shadow);margin-bottom:12px}
+.card h2{margin:0 0 8px;font-size:18px;font-weight:800;display:flex;align-items:center;gap:8px;letter-spacing:.02em}
+.card h2 .k{width:6px;height:22px;border-radius:3px;background:var(--navy)}
+.card h2 small{margin-left:auto;font-size:12px;color:var(--faint);font-weight:400;font-family:"Noto Sans KR"}
+.card .lead{color:var(--muted);font-size:14px;margin:0 0 10px}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;background:var(--surface);border-top:1px solid var(--line);padding:6px 4px calc(env(safe-area-inset-bottom,0px) + 6px)}
+.tabs button{flex:1;padding:6px 2px;font-size:11px;color:var(--faint);display:grid;place-items:center;gap:2px}
+.tabs button .ic{font-size:18px;line-height:1}
+.tabs button.on{color:var(--navy);font-weight:700}
+.page{display:none}.page.on{display:block}
+
+/* today flow */
+.flow{display:grid;gap:8px}
+.fi{display:grid;grid-template-columns:34px 1fr auto;gap:12px;align-items:center;padding:12px 14px;border-radius:12px;background:var(--surface2)}
+.fi .n{width:34px;height:34px;border-radius:50%;border:2px solid var(--navy);display:grid;place-items:center;font-weight:700;color:var(--navy);font-family:"Nanum Myeongjo"}
+.fi.done .n{background:var(--navy);color:#fff}
+.fi .t{font-weight:700}.fi.done .t{color:var(--muted);text-decoration:line-through}
+.fi .s{font-size:13px;color:var(--muted)}
+.fi .go{font-size:13px;color:var(--navy);text-decoration:underline}
+.streak{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chip{background:var(--surface2);border-radius:999px;padding:5px 12px;font-size:13px;color:var(--muted)}
+.chip b{color:var(--ink)}
+
+/* affirmation / prayer */
+.big{font-family:"Nanum Myeongjo";font-size:20px;line-height:1.85;padding:14px 16px;border-left:4px solid var(--gold);background:var(--gold-soft);border-radius:0 12px 12px 0}
+.big .ref{display:block;font-size:13px;color:var(--muted);margin-top:6px;font-family:"Noto Sans KR"}
+.rowbtns{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.btn{padding:11px 16px;border-radius:12px;font-weight:700;font-size:15px;background:var(--surface2);border:1px solid var(--line)}
+.btn.primary{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btn.rec{background:var(--wine);color:#fff;border-color:var(--wine)}
+.btn.rec.on{animation:pulse 1s infinite alternate}
+@keyframes pulse{to{box-shadow:0 0 0 6px rgba(123,45,59,.25)}}
+.btn:disabled{opacity:.4}
+.btn.small{padding:6px 10px;font-size:13px;font-weight:500}
+textarea{width:100%;font:inherit;font-size:16px;line-height:1.7;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--surface2);color:inherit;resize:vertical;min-height:90px}
+textarea.serif{font-family:"Nanum Myeongjo";font-size:17px}
+.hint{font-size:13px;color:var(--faint);margin-top:6px;min-height:20px}
+.transcript{margin-top:10px;padding:12px 14px;border-radius:12px;background:var(--surface2);font-family:"Nanum Myeongjo";font-size:16.5px;line-height:1.85;min-height:60px;white-space:pre-wrap}
+.transcript.empty{color:var(--faint);font-family:"Noto Sans KR";font-size:14px}
+.audio{margin-top:8px;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.audio audio{height:32px;flex:1;min-width:0}
+.pick{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.pick button{font-size:13px;padding:6px 12px;border-radius:999px;background:var(--surface2);border:1px solid var(--line)}
+.pick button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.saved{font-size:13px;color:var(--olive);font-weight:700;margin-top:8px}
+
+/* prayer topics */
+.acts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.acts div{padding:10px 12px;border-radius:12px;background:var(--surface2);font-size:13.5px;line-height:1.6}
+.acts b{display:block;font-family:"Nanum Myeongjo";font-size:15px;color:var(--navy)}
+.topics{display:grid;gap:6px;margin-top:8px}
+.tp{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:9px 12px;border-radius:12px;background:var(--surface2);font-size:14.5px}
+.tp .cat{font-size:11px;letter-spacing:.1em;color:var(--gold);font-weight:700;white-space:nowrap}
+.tp .ans{font-size:12px;color:var(--faint);text-decoration:underline}
+.tp.done{opacity:.55}.tp.done .t{text-decoration:line-through}
+.addrow{display:flex;gap:8px;margin-top:10px}
+.addrow input{flex:1;font:inherit;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface2);color:inherit;min-width:0}
+.addrow select{font:inherit;padding:8px;border-radius:12px;border:1px solid var(--line);background:var(--surface2);color:inherit}
+
+/* todo */
+.todos{display:grid;gap:6px}
+.td{display:grid;grid-template-columns:26px 1fr auto;gap:10px;align-items:center;padding:9px 12px;border-radius:12px;background:var(--surface2)}
+.td .chk{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;color:#fff;font-size:13px}
+.td.done .chk{background:var(--olive);border-color:var(--olive)}
+.td.done .t{text-decoration:line-through;color:var(--muted)}
+.td .t{font-weight:500}
+.td .meta{font-size:12px;color:var(--faint)}
+.td .x{color:var(--faint);font-size:16px;padding:0 4px}
+.td.top3 .t::before{content:"★ ";color:var(--gold)}
+.todohint{font-size:13px;color:var(--faint);margin-top:8px}
+
+/* creed */
+.creed{font-family:"Nanum Myeongjo";font-size:17px;line-height:1.95;white-space:pre-line;padding:14px 16px;border-radius:12px;background:var(--surface2)}
+.idlist{display:grid;gap:8px}
+.id{padding:12px 14px;border-radius:12px;background:var(--surface2);border-left:4px solid var(--olive)}
+.id b{display:block;font-family:"Nanum Myeongjo";font-size:16.5px;margin-bottom:2px}
+.id p{margin:0;font-size:14px;color:var(--muted);line-height:1.7}
+.id .ref{font-size:12.5px;color:var(--olive);margin-top:4px}
+
+/* records */
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:8px}
+.cal .h{font-size:10.5px;text-align:center;color:var(--faint)}
+.cal .c{aspect-ratio:1;border-radius:8px;border:1px solid var(--line);display:grid;place-items:center;font-size:12px;color:var(--faint);position:relative;font-family:"IBM Plex Mono"}
+.cal .c.today{outline:2px solid var(--gold);outline-offset:-2px}
+.cal .c.future{opacity:.3}
+.cal .c .d{position:absolute;bottom:3px;display:flex;gap:2px}
+.cal .c .d i{width:5px;height:5px;border-radius:50%}
+.cal .c.full{background:var(--navy-soft);color:var(--ink)}
+.legend{display:flex;gap:12px;font-size:12px;color:var(--muted);margin-top:6px;flex-wrap:wrap}
+.legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}
+.arch{display:grid;gap:8px;margin-top:8px}
+.day{padding:12px 14px;border-radius:12px;background:var(--surface2)}
+.day .dt{font-family:"IBM Plex Mono";font-size:12px;color:var(--muted);display:flex;justify-content:space-between}
+.day .lbl{font-size:11px;letter-spacing:.15em;color:var(--gold);font-weight:700;margin-top:8px}
+.day .tx{font-family:"Nanum Myeongjo";font-size:15px;line-height:1.8;white-space:pre-wrap}
+.day .tds{font-size:13px;color:var(--muted)}
+.search{width:100%;font:inherit;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface2);color:inherit;margin-top:8px}
+.empty{color:var(--faint);font-size:13.5px;padding:12px;text-align:center}
+.sync{font-size:11px;color:var(--faint);text-align:center;margin-top:16px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <div class="date" id="topDate"></div>
+    <h1 class="serif">아침 제단</h1>
+    <div class="verse" id="topVerse"></div>
+  </div>
+
+  <!-- TODAY -->
+  <section class="page on" id="p-today">
+    <div class="card">
+      <h2><span class="k"></span>오늘의 순서<small id="flowMeta"></small></h2>
+      <p class="lead">하루의 첫 자리를 하나님께. 순서대로 하면 15분이면 된다.</p>
+      <div class="flow" id="flow"></div>
+      <div class="streak"><span class="chip">🔥 연속 <b id="stStreak">0</b>일</span><span class="chip">제단 쌓은 날 <b id="stDays">0</b></span><span class="chip">응답된 기도 <b id="stAns">0</b></span></div>
+    </div>
+    <div class="card">
+      <h2><span class="k" style="background:var(--gold)"></span>오늘의 확언</h2>
+      <div class="big" id="homeAff"></div>
+      <div class="rowbtns"><button class="btn primary" data-go="aff">소리 내어 고백하러 가기</button></div>
+    </div>
+    <div class="card">
+      <h2><span class="k" style="background:var(--olive)"></span>오늘의 할 일<small id="homeTodoMeta"></small></h2>
+      <div class="todos" id="homeTodos"></div>
+      <div class="rowbtns"><button class="btn" data-go="todo">할 일 정리하기</button></div>
+    </div>
+  </section>
+
+  <!-- AFFIRMATION -->
+  <section class="page" id="p-aff">
+    <div class="card">
+      <h2><span class="k" style="background:var(--gold)"></span>확언 · 신앙 고백<small id="affDate"></small></h2>
+      <p class="lead">눈으로 읽지 말고 <b>입으로 말하라</b>. 들리는 고백이 마음을 세운다. 녹음 버튼을 누르고 아래 문장을 소리 내어 읽으면 글로 받아 적어 오늘 기록에 남긴다.</p>
+      <div class="pick" id="affPick"></div>
+      <div class="big" id="affText"></div>
+      <textarea class="serif" id="affCustom" placeholder="내 말로 바꿔 고백하고 싶으면 여기에 적는다 (선택). 비워 두면 위 문장을 읽는다." style="margin-top:10px;min-height:70px"></textarea>
+      <div class="rowbtns"><button class="btn rec" id="affRec">● 녹음하며 고백하기</button><button class="btn" id="affSave" disabled>오늘 기록에 저장</button></div>
+      <div class="hint" id="affHint"></div>
+      <div class="transcript empty" id="affTx">받아 적은 고백이 여기 뜬다</div>
+      <div class="audio" id="affAudio" hidden></div>
+      <div class="saved" id="affSaved"></div>
+    </div>
+  </section>
+
+  <!-- PRAYER -->
+  <section class="page" id="p-pray">
+    <div class="card">
+      <h2><span class="k" style="background:var(--wine)"></span>기도<small id="prayDate"></small></h2>
+      <p class="lead">오늘 추천 기도 제목 세 가지와 네 기도 목록을 보며, 녹음을 켜고 소리 내어 기도하라. 기도가 글로 남는다.</p>
+      <div class="acts" id="acts"></div>
+      <div style="margin-top:12px;font-size:13px;letter-spacing:.1em;color:var(--muted)">오늘의 추천 제목</div>
+      <div class="topics" id="todayTopics"></div>
+      <div class="rowbtns"><button class="btn rec" id="prayRec">● 녹음하며 기도하기</button><button class="btn" id="praySave" disabled>오늘 기록에 저장</button></div>
+      <div class="hint" id="prayHint"></div>
+      <div class="transcript empty" id="prayTx">받아 적은 기도가 여기 뜬다. 문장이 어색해도 괜찮다 — 다시 읽을 때 마음이 떠오르면 된다.</div>
+      <div class="audio" id="prayAudio" hidden></div>
+      <div class="saved" id="praySaved"></div>
+    </div>
+    <div class="card">
+      <h2><span class="k" style="background:var(--wine)"></span>내 기도 제목<small id="topicMeta"></small></h2>
+      <div class="topics" id="myTopics"></div>
+      <div class="addrow"><select id="tpCat"><option>가족</option><option>교회</option><option>학업</option><option>찬양팀</option><option>친구</option><option>나라</option><option>나 자신</option><option>기타</option></select><input type="text" id="tpNew" placeholder="기도 제목 추가" maxlength="80"><button class="btn small" id="tpAdd">추가</button></div>
+      <div class="todohint">응답을 누르면 응답 기록으로 옮겨진다. 응답된 기도를 다시 읽는 것이 감사의 재료다.</div>
+    </div>
+  </section>
+
+  <!-- TODO -->
+  <section class="page" id="p-todo">
+    <div class="card">
+      <h2><span class="k" style="background:var(--olive)"></span>오늘의 할 일<small id="todoMeta"></small></h2>
+      <p class="lead">"무슨 일을 하든지 주께 하듯 하라." 오늘 꼭 할 셋에 ★을 두고, 나머지는 그 뒤에.</p>
+      <div class="addrow"><input type="text" id="tdNew" placeholder="할 일 (Enter로 추가)" maxlength="80"><button class="btn small" id="tdAdd">추가</button></div>
+      <div class="todos" id="todos" style="margin-top:10px"></div>
+      <div class="todohint">못 끝낸 일은 내일로 자동으로 넘어간다. ★을 눌러 오늘의 셋을 정한다.</div>
+    </div>
+  </section>
+
+  <!-- CREED & IDENTITY -->
+  <section class="page" id="p-creed">
+    <div class="card">
+      <h2><span class="k"></span>주기도문</h2>
+      <div class="creed" id="lordsPrayer"></div>
+      <div class="rowbtns"><button class="btn" data-recite="lp">소리 내어 읽고 오늘 기록에 남기기</button></div>
+    </div>
+    <div class="card">
+      <h2><span class="k"></span>사도신경</h2>
+      <div class="creed" id="creed"></div>
+      <div class="rowbtns"><button class="btn" data-recite="ac">소리 내어 읽고 오늘 기록에 남기기</button></div>
+    </div>
+    <div class="card">
+      <h2><span class="k" style="background:var(--olive)"></span>장로교인의 정체성 일곱 가지</h2>
+      <p class="lead">개혁신앙이 말하는 "나는 누구인가". 확언은 여기서 나온다.</p>
+      <div class="idlist" id="idlist"></div>
+    </div>
+  </section>
+
+  <!-- RECORDS -->
+  <section class="page" id="p-rec">
+    <div class="card">
+      <h2><span class="k"></span>제단 달력<small id="calMonth"></small></h2>
+      <div class="cal" id="cal"></div>
+      <div class="legend"><span><i style="background:var(--gold)"></i>확언</span><span><i style="background:var(--wine)"></i>기도</span><span><i style="background:var(--olive)"></i>할 일 완료</span><span>파란 칸 = 셋 다</span></div>
+    </div>
+    <div class="card">
+      <h2><span class="k"></span>기록 다시 읽기</h2>
+      <input class="search" id="search" placeholder="고백·기도 속 단어로 찾기">
+      <div class="arch" id="arch"></div>
+    </div>
+    <div class="card">
+      <h2><span class="k" style="background:var(--wine)"></span>응답된 기도</h2>
+      <div class="topics" id="answered"></div>
+    </div>
+    <div class="sync" id="syncMsg">이 기기에 저장됨</div>
+  </section>
+</div>
+
+<nav class="tabs">
+  <button class="on" data-tab="today"><span class="ic">☀</span>오늘</button>
+  <button data-tab="aff"><span class="ic">✦</span>확언</button>
+  <button data-tab="pray"><span class="ic">🙏</span>기도</button>
+  <button data-tab="todo"><span class="ic">☑</span>할 일</button>
+  <button data-tab="creed"><span class="ic">✝</span>고백문</button>
+  <button data-tab="rec"><span class="ic">▤</span>기록</button>
+</nav>
+
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+const fmtK = d => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const todayKey = () => fmtK(new Date());
+
+// ---------- content ----------
+const AFF = [
+ {t:'나는 우연히 태어난 존재가 아니라, 하나님이 창세 전에 택하시고 사랑으로 부르신 자녀다.', r:'엡 1:4-5'},
+ {t:'내 구원은 내 행위가 아니라 오직 은혜, 오직 믿음, 오직 그리스도로 말미암는다. 그래서 흔들리지 않는다.', r:'엡 2:8-9'},
+ {t:'사람의 제일 되는 목적은 하나님을 영화롭게 하고 그분을 영원토록 즐거워하는 것이다. 오늘 하루도 그 목적을 위해 산다.', r:'웨스트민스터 소요리문답 1문, 고전 10:31'},
+ {t:'살아서나 죽어서나 나는 내 것이 아니요, 몸과 영혼이 모두 신실하신 구주 예수 그리스도의 것이다.', r:'하이델베르크 요리문답 1문, 롬 14:8'},
+ {t:'하나님은 모든 일을 그분의 뜻대로 다스리신다. 오늘 내게 오는 일도 그분의 손을 거쳐 온다.', r:'롬 8:28, 잠 16:9'},
+ {t:'나는 그리스도의 몸인 교회의 지체다. 혼자 믿지 않고, 함께 예배하고 함께 짐을 진다.', r:'고전 12:27, 갈 6:2'},
+ {t:'성경은 하나님의 말씀이며 내 삶의 유일한 최종 기준이다. 내 감정보다 말씀이 옳다.', r:'딤후 3:16, 시 119:105'},
+ {t:'내 공부와 일과 운동은 예배다. 사람에게가 아니라 주께 하듯 오늘 맡은 일을 한다.', r:'골 3:23'},
+ {t:'나는 성령이 거하시는 성전이다. 내 몸과 말과 생각을 거룩하게 지킨다.', r:'고전 6:19-20'},
+ {t:'내가 넘어져도 은혜는 나보다 크다. 회개하고 다시 일어나는 것이 성도의 길이다.', r:'잠 24:16, 요일 1:9'},
+ {t:'두려움은 오늘의 내 주인이 아니다. 하나님이 나와 함께하시니 담대하다.', r:'수 1:9, 사 41:10'},
+ {t:'나는 세상의 소금과 빛이다. 내가 있는 자리가 조금 더 밝아지게 산다.', r:'마 5:13-16'},
+ {t:'내 힘으로 하루를 지탱하지 않는다. 일용할 양식처럼 오늘 필요한 은혜를 오늘 구한다.', r:'마 6:11, 애 3:22-23'},
+ {t:'나는 하나님 나라의 백성이며 영원한 소망을 가진 사람이다. 오늘의 작은 순종이 영원에 닿는다.', r:'빌 3:20, 고전 15:58'},
+];
+const IDENT = [
+ {b:'하나님의 주권', p:'세상과 내 삶의 모든 일이 하나님의 다스림 아래 있다. 그래서 내일을 염려하는 대신 오늘 순종한다.', r:'시 103:19, 롬 11:36'},
+ {b:'오직 은혜, 오직 믿음', p:'구원은 내가 얻어낸 것이 아니라 값없이 받은 선물이다. 잘한 날도 못한 날도 내 자리는 같다.', r:'엡 2:8-9, 롬 3:24'},
+ {b:'오직 성경', p:'성경은 하나님의 영감으로 된 말씀이며 믿음과 삶의 최종 권위다. 매일 읽고, 읽은 대로 산다.', r:'딤후 3:16-17'},
+ {b:'언약의 백성', p:'하나님은 약속하시고 지키시는 분이다. 나는 그 언약 안에 있는 백성이며, 세례와 성찬이 그 표다.', r:'창 17:7, 렘 31:33'},
+ {b:'교회의 지체', p:'장로교회는 "함께" 다스리고 "함께" 섬기는 교회다. 나는 혼자 믿는 사람이 아니라 몸의 한 부분이다.', r:'고전 12, 행 15'},
+ {b:'삶 전체가 예배', p:'주일 예배와 평일의 공부·일·운동이 나뉘지 않는다. 모든 자리가 하나님 앞(코람 데오)이다.', r:'롬 12:1, 골 3:17'},
+ {b:'하나님을 영화롭게, 영원히 즐거워하기', p:'사람의 제일 되는 목적. 의무이면서 동시에 기쁨이다. 오늘 하루의 방향을 여기서 잡는다.', r:'웨스트민스터 소요리문답 1문'},
+];
+const LP = `하늘에 계신 우리 아버지,
+아버지의 이름을 거룩하게 하시며
+아버지의 나라가 오게 하시며,
+아버지의 뜻이 하늘에서와 같이
+땅에서도 이루어지게 하소서.
+
+오늘 우리에게 일용할 양식을 주시고,
+우리가 우리에게 잘못한 사람을 용서하여 준 것같이
+우리 죄를 용서하여 주시고,
+우리를 시험에 빠지지 않게 하시고
+악에서 구하소서.
+
+나라와 권능과 영광이
+영원히 아버지의 것입니다.
+아멘.`;
+const AC = `나는 전능하신 아버지 하나님,
+천지의 창조주를 믿습니다.
+
+나는 그의 유일하신 아들,
+우리 주 예수 그리스도를 믿습니다.
+그는 성령으로 잉태되어 동정녀 마리아에게서 나시고,
+본디오 빌라도에게 고난을 받아 십자가에 못 박혀 죽으시고,
+장사된 지 사흘만에 죽은 자 가운데서 다시 살아나셨으며,
+하늘에 오르시어 전능하신 아버지 하나님 우편에 앉아 계시다가,
+거기로부터 살아있는 자와 죽은 자를 심판하러 오십니다.
+
+나는 성령을 믿으며,
+거룩한 공교회와 성도의 교제와
+죄를 용서 받는 것과
+몸의 부활과 영생을 믿습니다.
+아멘.`;
+const ACTS = [['A · 경배','하나님이 어떤 분이신지로 시작한다. 오늘 떠오르는 하나님의 성품 하나.'],['C · 회개','어제와 오늘 사이의 구체적인 잘못 하나. 두루뭉술하게 말고.'],['T · 감사','응답된 기도, 당연해 보이는 것들. 최소 세 가지.'],['S · 간구','나, 가족, 교회, 세상 순서로. 아래 추천 제목을 참고.']];
+const SUGGEST = [
+ ['가족','부모님의 건강과 오늘 하루의 평안'],['교회','우리 교회 담임 목사님과 설교 준비'],['교회','이번 주일 예배와 찬양팀의 섬김'],['학업','오늘 공부할 과목에 집중력과 이해력'],['나 자신','말을 조심하고 온유하게 반응하는 하루'],['나라','나라의 지도자들과 정의로운 결정'],['세상','복음이 아직 닿지 않은 곳과 선교사들'],['친구','믿지 않는 친구 한 명의 이름을 부르며'],['나 자신','몸을 성전으로 여기고 절제하는 것'],['교회','병중이거나 어려움 중인 교우'],['가족','가족 중 아직 믿지 않는 사람'],['학업','시험과 입시 과정에서 하나님의 인도'],['나 자신','감사할 줄 아는 마음, 비교하지 않는 마음'],['세상','전쟁과 재난 가운데 있는 사람들'],['나라','다음 세대와 학교의 교사들'],
+];
+const VERSES = ['"아침에 나로 하여금 주의 인자한 말씀을 듣게 하소서" (시 143:8)','"여호와를 경외하는 것이 지혜의 근본이요" (잠 9:10)','"주께서 새벽에 도우시리로다" (시 46:5)','"무슨 일을 하든지 마음을 다하여 주께 하듯 하고" (골 3:23)','"너희는 먼저 그의 나라와 그의 의를 구하라" (마 6:33)','"내가 새벽 날개를 치며" (시 139:9)','"이것이 여호와께서 정하신 날이니 기뻐하고 즐거워하리로다" (시 118:24)'];
+
+// ---------- state ----------
+const KEY='altar-v1';
+let S={days:{}, topics:[], todos:[], updatedAt:0};
+try{ const raw=localStorage.getItem(KEY); if(raw) S=Object.assign(S,JSON.parse(raw)); }catch(e){}
+let db=null, docRef=null, wT=null, applying=false;
+function persist(){ S.updatedAt=Date.now(); try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){} if(docRef&&!applying){ clearTimeout(wT); wT=setTimeout(async()=>{ try{ await docRef.set(JSON.parse(JSON.stringify(S))); $('syncMsg').textContent='클라우드에 동기화됨'; }catch(e){ $('syncMsg').textContent='이 기기에 저장됨 (동기화 실패)'; } },600);} }
+(async()=>{ try{ db=await (window.claude?.use?.('db')??Promise.resolve(null)); if(!db) return; docRef=db.doc('state/main'); const s=await docRef.get(); if(s.exists){ const r=s.data(); if((r.updatedAt||0)>(S.updatedAt||0)){ applying=true; S=Object.assign(S,r); try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} render(); applying=false; } else if((S.updatedAt||0)>(r.updatedAt||0)) persist(); } else persist(); $('syncMsg').textContent='클라우드에 동기화됨'; docRef.onSnapshot(sn=>{ if(!sn.exists||sn.metadata.hasPendingWrites) return; const r=sn.data(); if((r.updatedAt||0)>(S.updatedAt||0)){ applying=true; S=Object.assign(S,r); render(); applying=false; } },()=>{}); }catch(e){} })();
+const day = k => { k=k||todayKey(); S.days[k]=S.days[k]||{}; return S.days[k]; };
+// carry over undone todos: todos have {id,t,done,doneDay,star,created}
+S.todos.forEach(t=>{ if(t.done && t.doneDay!==todayKey()) t.archived=true; });
+
+// ---------- tabs ----------
+function showTab(k){ document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===k)); document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id==='p-'+k)); window.scrollTo({top:0}); }
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>showTab(b.dataset.go));
+
+// ---------- speech recording (shared) ----------
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+function makeRecorder(cfg){ // cfg: btn, hint, tx, audio, save, onDone(text)
+  let rec=null, listening=false, media=null, chunks=[], heard='';
+  if(!SR){ cfg.btn.disabled=true; cfg.hint.textContent='이 브라우저는 음성인식을 지원하지 않는다. Safari·Chrome에서 열자. 직접 타이핑해서 저장할 수도 있다.'; cfg.tx.contentEditable='true'; cfg.tx.classList.remove('empty'); cfg.tx.textContent=''; cfg.save.disabled=false; }
+  async function start(){
+    heard=''; cfg.tx.textContent=''; cfg.tx.classList.remove('empty'); cfg.audio.hidden=true; cfg.audio.innerHTML='';
+    try{ const stream=await navigator.mediaDevices.getUserMedia({audio:true}); const mime=['audio/mp4','audio/webm;codecs=opus','audio/webm'].find(m=>window.MediaRecorder&&MediaRecorder.isTypeSupported(m))||''; media=new MediaRecorder(stream, mime?{mimeType:mime}:undefined); chunks=[]; media.ondataavailable=e=>chunks.push(e.data); media.onstop=()=>{ stream.getTracks().forEach(t=>t.stop()); const blob=new Blob(chunks,{type:media.mimeType}); const url=URL.createObjectURL(blob); cfg.audio.hidden=false; cfg.audio.innerHTML='<span>다시 듣기 (이번 세션만)</span><audio controls src="'+url+'"></audio>'; }; media.start(); }catch(e){ media=null; }
+    rec=new SR(); rec.lang='ko-KR'; rec.continuous=true; rec.interimResults=true;
+    rec.onresult=e=>{ let fin='',interim=''; for(let i=0;i<e.results.length;i++){ const r=e.results[i]; if(r.isFinal) fin+=r[0].transcript+' '; else interim+=r[0].transcript; } heard=fin+interim; cfg.tx.textContent=heard; };
+    rec.onerror=e=>{ cfg.hint.textContent= e.error==='not-allowed'?'마이크 권한이 막혀 있다. 브라우저 설정에서 허용하자.':'음성인식 오류: '+e.error; stop(); };
+    rec.onend=()=>{ if(listening){ listening=false; ui(); } };
+    try{ rec.start(); listening=true; ui(); cfg.hint.textContent='듣고 있다… 천천히, 또렷하게. 끝나면 버튼을 다시 누르자.'; }catch(e){ cfg.hint.textContent='시작 실패. 다시 눌러 보자.'; }
+  }
+  function stop(){ if(rec){ try{rec.stop();}catch(e){} } if(media&&media.state==='recording') media.stop(); listening=false; ui(); if(heard.trim()){ cfg.hint.textContent='받아 적었다. 틀린 글자는 눌러서 고칠 수 있다. 저장을 누르면 오늘 기록에 남는다.'; cfg.tx.contentEditable='true'; cfg.save.disabled=false; } else cfg.hint.textContent='들린 말이 없다. 조금 더 크게 말해 보자.'; }
+  function ui(){ cfg.btn.classList.toggle('on',listening); cfg.btn.textContent=listening?'■ 다 했다 (멈춤)':cfg.label; }
+  cfg.btn.onclick=()=>listening?stop():start();
+  cfg.save.onclick=()=>{ const text=cfg.tx.textContent.trim(); if(!text) return; cfg.onDone(text); cfg.save.disabled=true; cfg.tx.contentEditable='false'; };
+  ui();
+}
+
+// ---------- affirmation ----------
+let affIdx = (new Date().getDate() + new Date().getMonth()) % AFF.length;
+function renderAff(){
+  const d=day(); $('affDate').textContent=todayKey();
+  $('affPick').innerHTML=AFF.map((a,i)=>`<button class="${i===affIdx?'on':''}" data-i="${i}">${i+1}</button>`).join('');
+  $('affText').innerHTML=AFF[affIdx].t+'<span class="ref">'+AFF[affIdx].r+'</span>';
+  $('homeAff').innerHTML=AFF[affIdx].t+'<span class="ref">'+AFF[affIdx].r+'</span>';
+  $('affSaved').textContent=d.aff?'✓ 오늘 고백 저장됨 · '+d.aff.slice(0,40)+(d.aff.length>40?'…':''):'';
+}
+$('affPick').onclick=e=>{ const b=e.target.closest('button[data-i]'); if(b){ affIdx=+b.dataset.i; renderAff(); } };
+makeRecorder({btn:$('affRec'), hint:$('affHint'), tx:$('affTx'), audio:$('affAudio'), save:$('affSave'), label:'● 녹음하며 고백하기', onDone:text=>{ const d=day(); d.aff=text; d.affRef=($('affCustom').value.trim()?'내 말로':'확언 '+(affIdx+1)); persist(); render(); }});
+
+// ---------- prayer ----------
+function todaySuggest(){ const seed=new Date().getDate()*7+new Date().getMonth(); const out=[]; const open=S.topics.filter(t=>!t.answered); if(open.length) out.push({cat:open[seed%open.length].cat, t:open[seed%open.length].t, mine:true}); for(let i=0;out.length<3;i++){ const s=SUGGEST[(seed+i*5)%SUGGEST.length]; if(!out.some(o=>o.t===s[1])) out.push({cat:s[0], t:s[1]}); } return out; }
+function renderPray(){
+  const d=day(); $('prayDate').textContent=todayKey();
+  $('acts').innerHTML=ACTS.map(a=>'<div><b>'+a[0]+'</b>'+a[1]+'</div>').join('');
+  $('todayTopics').innerHTML=todaySuggest().map(t=>`<div class="tp"><span class="cat">${t.cat}${t.mine?' · 내 제목':''}</span><span class="t">${esc(t.t)}</span><span></span></div>`).join('');
+  $('praySaved').textContent=d.pray?'✓ 오늘 기도 저장됨 · '+d.pray.slice(0,40)+(d.pray.length>40?'…':''):'';
+  const open=S.topics.filter(t=>!t.answered); $('topicMeta').textContent=open.length+'개 진행 중';
+  $('myTopics').innerHTML=open.length?open.map(t=>`<div class="tp"><span class="cat">${t.cat}</span><span class="t">${esc(t.t)}<div style="font-size:11px;color:var(--faint)">${t.since}부터</div></span><span><button class="ans" data-ans="${t.id}">응답</button> <button class="ans" data-del="${t.id}">삭제</button></span></div>`).join(''):'<div class="empty">기도 제목을 적어 두면 매일 하나씩 추천 자리에 올라온다.</div>';
+  $('answered').innerHTML=S.topics.filter(t=>t.answered).map(t=>`<div class="tp done"><span class="cat">${t.cat}</span><span class="t">${esc(t.t)}</span><span style="font-size:11px;color:var(--faint)">${t.since} → ${t.answered}</span></div>`).join('')||'<div class="empty">아직 없음. 응답은 온다.</div>';
+}
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+$('tpAdd').onclick=()=>{ const t=$('tpNew').value.trim(); if(!t) return; S.topics.unshift({id:Math.random().toString(36).slice(2,9), cat:$('tpCat').value, t, since:todayKey().slice(5), answered:''}); $('tpNew').value=''; persist(); render(); };
+$('tpNew').addEventListener('keydown',e=>{ if(e.key==='Enter') $('tpAdd').click(); });
+$('myTopics').onclick=e=>{ const a=e.target.closest('[data-ans]'), d=e.target.closest('[data-del]'); if(a){ const t=S.topics.find(x=>x.id===a.dataset.ans); if(t){ t.answered=todayKey().slice(5); persist(); render(); } } if(d){ S.topics=S.topics.filter(x=>x.id!==d.dataset.del); persist(); render(); } };
+makeRecorder({btn:$('prayRec'), hint:$('prayHint'), tx:$('prayTx'), audio:$('prayAudio'), save:$('praySave'), label:'● 녹음하며 기도하기', onDone:text=>{ const d=day(); d.pray=(d.pray?d.pray+'\n\n':'')+text; persist(); render(); }});
+
+// ---------- recite creeds ----------
+$('lordsPrayer').textContent=LP; $('creed').textContent=AC;
+document.querySelectorAll('[data-recite]').forEach(b=>b.onclick=()=>{ const k=b.dataset.recite; const d=day(); d[k]=true; persist(); b.textContent='✓ 오늘 기록에 남김'; render(); });
+$('idlist').innerHTML=IDENT.map((i,n)=>`<div class="id"><b>${n+1}. ${i.b}</b><p>${i.p}</p><div class="ref">${i.r}</div></div>`).join('');
+
+// ---------- todos ----------
+function activeTodos(){ return S.todos.filter(t=>!t.archived); }
+function renderTodos(){
+  const list=activeTodos(); const done=list.filter(t=>t.done).length;
+  $('todoMeta').textContent=list.length?done+'/'+list.length+' 완료':'없음'; $('homeTodoMeta').textContent=list.length?done+'/'+list.length:'';
+  const html=t=>`<div class="td ${t.done?'done':''} ${t.star?'top3':''}" data-id="${t.id}"><button class="chk" data-act="tog">${t.done?'✓':''}</button><div><div class="t">${esc(t.t)}</div><div class="meta">${t.created!==todayKey()?'이월 · '+t.created.slice(5):''}</div></div><span><button class="x" data-act="star" title="오늘의 셋">${t.star?'★':'☆'}</button><button class="x" data-act="del">×</button></span></div>`;
+  const sorted=[...list].sort((a,b)=>(a.done-b.done)||(b.star-a.star));
+  $('todos').innerHTML=sorted.length?sorted.map(html).join(''):'<div class="empty">오늘 할 일을 적어 보자. 셋이면 충분하다.</div>';
+  $('homeTodos').innerHTML=sorted.filter(t=>!t.done).slice(0,5).map(html).join('')||'<div class="empty">'+(list.length?'오늘 할 일을 다 마쳤다.':'아직 할 일이 없다.')+'</div>';
+}
+function addTodo(){ const t=$('tdNew').value.trim(); if(!t) return; S.todos.unshift({id:Math.random().toString(36).slice(2,9), t, done:false, star:activeTodos().filter(x=>x.star).length<3, created:todayKey()}); $('tdNew').value=''; persist(); render(); }
+$('tdAdd').onclick=addTodo; $('tdNew').addEventListener('keydown',e=>{ if(e.key==='Enter') addTodo(); });
+document.addEventListener('click',e=>{ const b=e.target.closest('[data-act]'); if(!b) return; const el=b.closest('.td'); const t=S.todos.find(x=>x.id===el.dataset.id); if(!t) return; if(b.dataset.act==='tog'){ t.done=!t.done; t.doneDay=t.done?todayKey():''; if(t.done){ const d=day(); d.todo=(d.todo||0)+1; } else { const d=day(); d.todo=Math.max(0,(d.todo||0)-1); } } if(b.dataset.act==='star') t.star=!t.star; if(b.dataset.act==='del') S.todos=S.todos.filter(x=>x!==t); persist(); render(); });
+
+// ---------- today / records ----------
+function renderToday(){
+  const d=day(); const nowD=new Date();
+  $('topDate').textContent=nowD.toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric',weekday:'long'});
+  $('topVerse').textContent=VERSES[nowD.getDay()];
+  const items=[{n:'一',t:'확언 · 소리 내어 고백',s:d.aff?'저장됨':'오늘의 확언 읽기',done:!!d.aff,go:'aff'},{n:'二',t:'기도 · 녹음하며',s:d.pray?'저장됨':'추천 제목 3가지',done:!!d.pray,go:'pray'},{n:'三',t:'주기도문 · 사도신경',s:(d.lp||d.ac)?'읽음':'고백문 한 번',done:!!(d.lp||d.ac),go:'creed'},{n:'四',t:'오늘의 할 일 셋 정하기',s:activeTodos().filter(t=>t.star).length+'개 ★',done:activeTodos().filter(t=>t.star).length>=1,go:'todo'}];
+  $('flow').innerHTML=items.map(i=>`<div class="fi ${i.done?'done':''}"><div class="n serif">${i.n}</div><div><div class="t">${i.t}</div><div class="s">${i.s}</div></div><button class="go" data-go="${i.go}">${i.done?'보기':'하기'}</button></div>`).join('');
+  $('flow').querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>showTab(b.dataset.go));
+  const full=k=>{ const x=S.days[k]||{}; return x.aff&&x.pray; };
+  let st=0; const dd=new Date(); if(!full(fmtK(dd))) dd.setDate(dd.getDate()-1); while(full(fmtK(dd))&&st<2000){ st++; dd.setDate(dd.getDate()-1); }
+  $('stStreak').textContent=st; $('stDays').textContent=Object.keys(S.days).filter(k=>S.days[k].aff||S.days[k].pray).length; $('stAns').textContent=S.topics.filter(t=>t.answered).length;
+  $('flowMeta').textContent=items.filter(i=>i.done).length+'/4';
+}
+function renderRec(){
+  const now=new Date(), y=now.getFullYear(), m=now.getMonth(); const first=new Date(y,m,1), last=new Date(y,m+1,0).getDate(); const off=(first.getDay()+6)%7;
+  $('calMonth').textContent=(m+1)+'월';
+  let html=['월','화','수','목','금','토','일'].map(x=>'<div class="h">'+x+'</div>').join(''); for(let i=0;i<off;i++) html+='<div class="c" style="border:0"></div>';
+  for(let dd=1;dd<=last;dd++){ const k=fmtK(new Date(y,m,dd)); const x=S.days[k]||{}; const dots=(x.aff?'<i style="background:var(--gold)"></i>':'')+(x.pray?'<i style="background:var(--wine)"></i>':'')+(x.todo?'<i style="background:var(--olive)"></i>':''); html+=`<div class="c ${x.aff&&x.pray&&x.todo?'full':''} ${k===todayKey()?'today':''} ${dd>now.getDate()?'future':''}">${dd}<span class="d">${dots}</span></div>`; }
+  $('cal').innerHTML=html;
+  const q=($('search').value||'').trim();
+  const keys=Object.keys(S.days).filter(k=>S.days[k].aff||S.days[k].pray).sort().reverse().filter(k=>!q||((S.days[k].aff||'')+(S.days[k].pray||'')).includes(q)).slice(0,60);
+  $('arch').innerHTML=keys.length?keys.map(k=>{ const x=S.days[k]; return `<div class="day"><div class="dt"><span>${k}</span><span>${x.todo?'할 일 '+x.todo+'개 완료':''}${x.lp||x.ac?' · 고백문':''}</span></div>${x.aff?'<div class="lbl">고백 · '+(x.affRef||'')+'</div><div class="tx">'+esc(x.aff)+'</div>':''}${x.pray?'<div class="lbl">기도</div><div class="tx">'+esc(x.pray)+'</div>':''}</div>`; }).join(''):'<div class="empty">'+(q?'찾는 말이 없다.':'첫 고백과 기도를 저장하면 여기 쌓인다.')+'</div>';
+}
+$('search').addEventListener('input',renderRec);
+function render(){ renderToday(); renderAff(); renderPray(); renderTodos(); renderRec(); }
+render();
+})();
+</script>
+
+</body>
+</html>

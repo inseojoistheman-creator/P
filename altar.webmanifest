@@ -1,0 +1,1 @@
+{"name": "아침 제단", "short_name": "아침 제단", "start_url": "./altar.html", "display": "standalone", "background_color": "#f6f2ea", "theme_color": "#1f3a5f", "icons": [{"src": "altar-icon-512.png", "sizes": "512x512", "type": "image/png"}, {"src": "altar-icon-180.png", "sizes": "180x180", "type": "image/png"}]}
