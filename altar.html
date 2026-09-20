@@ -195,6 +195,17 @@ input[type=date]{font:inherit;font-size:16px;padding:8px 10px;border-radius:6px;
 details.manage{margin-top:12px;font-family:"Noto Sans KR";font-size:13.5px}details.manage summary{color:var(--navy);text-decoration:underline;cursor:pointer;padding:4px 0}
 .mline{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:8px 12px;border-radius:6px;background:var(--paper);border:1px solid var(--rule);margin-top:6px;font-family:"Gowun Batang";font-size:15px}
 
+.hb{display:grid;grid-template-columns:30px 1fr auto;gap:10px;align-items:center;padding:10px 12px;border-radius:6px;background:var(--paper);border:1px solid var(--rule);cursor:pointer}
+.hb .chk{width:28px;height:28px;border-radius:5px;border:1.5px solid var(--rule);display:grid;place-items:center;color:#fff;font-size:15px;background:var(--page)}
+.hb.done{background:var(--olive-soft)}.hb.done .chk{background:var(--olive);border-color:var(--olive)}
+.hb .t{font-weight:700}.hb.done .t{color:var(--muted)}
+.hb .meta{font-size:12px;color:var(--faint);font-family:"Noto Sans KR";display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.hb .wk{display:inline-flex;gap:3px}.hb .wk i{width:7px;height:7px;border-radius:50%;background:var(--rule)}.hb .wk i.y{background:var(--olive)}
+.hb .st{font-family:"IBM Plex Mono";font-size:13px;color:var(--gold);white-space:nowrap}
+.hbedit{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:8px 0;border-top:1px dashed var(--rule)}
+.hbedit:first-child{border-top:0}.hbedit .acts{display:flex;gap:6px}
+.master{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.master span{font-size:13px;padding:4px 10px;border-radius:999px;background:var(--gold-soft);border:1px solid var(--gold);font-family:"Noto Sans KR"}
+
 /* tabs */
 .tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;background:var(--page);border-top:1px solid var(--rule);padding:6px 4px calc(env(safe-area-inset-bottom,0px) + 6px);box-shadow:0 -6px 20px rgba(60,40,10,.08)}
 .tabs button{flex:1;min-width:0;padding:6px 1px;font-size:10.5px;white-space:nowrap;color:var(--faint);display:grid;place-items:center;gap:2px;font-family:"Noto Sans KR"}
@@ -251,9 +262,9 @@ details.manage{margin-top:12px;font-family:"Noto Sans KR";font-size:13.5px}detai
       <div class="rowbtns"><button class="btn" id="thinkNext">다른 질문</button><span class="hint" id="thinkSaved" style="margin:0;align-self:center"></span></div>
     </div>
     <div class="sheet">
-      <h2><span class="ch">IV</span>오늘의 할 일<small id="homeTodoMeta"></small></h2>
-      <div class="todos" id="homeTodos"></div>
-      <div class="rowbtns"><button class="btn" data-go="todo">할 일 정리하기</button></div>
+      <h2><span class="ch">IV</span>오늘의 습관<small id="homeHabitMeta"></small></h2>
+      <div class="todos" id="homeHabits"></div>
+      <div class="rowbtns"><button class="btn" data-go="todo">습관 추가 · 정리</button></div>
     </div>
   </section>
 
@@ -309,15 +320,21 @@ details.manage{margin-top:12px;font-family:"Noto Sans KR";font-size:13.5px}detai
   <!-- TODO -->
   <section class="page" id="p-todo">
     <div class="sheet">
-      <h2><span class="ch">IV</span>오늘의 할 일<small id="todoMeta"></small></h2>
-      <p class="lead">"무슨 일을 하든지 주께 하듯 하라." 오늘 꼭 할 셋에 ★. 하나를 끝내고 다음으로.</p>
-      <div class="addrow"><input type="text" id="tdNew" placeholder="할 일 (Enter로 추가)" maxlength="80"><button class="btn small" id="tdAdd">추가</button></div>
-      <div class="todos" id="todos" style="margin-top:10px"></div>
-      <div class="todohint">못 끝낸 일은 내일로 넘어간다. 3일 넘게 이월된 일은 굵게 표시된다 — 쪼개거나 버리자.</div>
+      <h2><span class="ch">IV</span>오늘의 습관<small id="habitMeta"></small></h2>
+      <p class="lead">한 번 정해 두면 <b>매일 새로</b> 뜬다. 한 것만 체크한다. "무슨 일을 하든지 주께 하듯 하라."</p>
+      <div class="todos" id="habits"></div>
+      <div class="addrow"><input type="text" id="hbNew" placeholder="만들고 싶은 습관 (예: 수학 기출 2시간)" maxlength="60"><button class="mic" id="hbMic">🎙</button><button class="btn small" id="hbAdd">추가</button></div>
+      <div class="hint" id="hbHint"></div>
+      <div class="pick" id="hbSuggest"></div>
+      <details class="manage"><summary>습관 수정 · 삭제 · 마스터</summary>
+        <div id="hbManage" style="margin-top:6px"></div>
+        <div class="todohint">몸에 완전히 붙은 습관은 '마스터'로 졸업시킨다. 목록에서 빠지고 아래 명예의 자리에 남는다.</div>
+      </details>
+      <div id="hbMasterWrap" hidden><div class="lbl2">마스터한 습관</div><div class="master" id="hbMaster"></div></div>
     </div>
     <div class="sheet">
       <h2><span class="ch">IV-b</span>아이디어 보관함<small id="ideaMeta"></small></h2>
-      <p class="lead">공부하다 새 아이디어·딴생각이 떠오르면 붙잡지 말고 여기 <b>맡겨 두고</b> 하던 일로 돌아간다. 주말에 열어서 할 일로 올리거나, 제안서로 남기거나, 버린다.</p>
+      <p class="lead">공부하다 새 아이디어·딴생각이 떠오르면 붙잡지 말고 여기 <b>맡겨 두고</b> 하던 일로 돌아간다. 주말에 열어서 습관으로 올리거나, 제안서로 남기거나, 버린다.</p>
       <div class="addrow"><input type="text" id="ideaNew" placeholder="떠오른 생각 한 줄" maxlength="200"><button class="mic" id="ideaMic">🎙</button><button class="btn small" id="ideaAdd">맡기기</button></div>
       <div class="hint" id="ideaHint"></div>
       <div class="topics" id="ideas"></div>
@@ -369,7 +386,7 @@ details.manage{margin-top:12px;font-family:"Noto Sans KR";font-size:13.5px}detai
     <div class="sheet">
       <h2><span class="ch">VII</span>제단 달력<small id="calMonth"></small></h2>
       <div class="cal" id="cal"></div>
-      <div class="legend"><span><i style="background:var(--gold)"></i>말씀 고백</span><span><i style="background:var(--wine)"></i>기도</span><span><i style="background:var(--olive)"></i>할 일</span><span>파란 칸 = 셋 다</span></div>
+      <div class="legend"><span><i style="background:var(--gold)"></i>말씀 고백</span><span><i style="background:var(--wine)"></i>기도</span><span><i style="background:var(--olive)"></i>습관</span><span>파란 칸 = 셋 다</span></div>
     </div>
     <div class="sheet">
       <h2><span class="ch">VII-b</span>이번 주 회고</h2>
@@ -400,7 +417,7 @@ details.manage{margin-top:12px;font-family:"Noto Sans KR";font-size:13.5px}detai
   <button class="on" data-tab="today"><span class="ic">☀</span>오늘</button>
   <button data-tab="aff"><span class="ic">✦</span>말씀</button>
   <button data-tab="pray"><span class="ic">🙏</span>기도</button>
-  <button data-tab="todo"><span class="ic">☑</span>할 일</button>
+  <button data-tab="todo"><span class="ic">☑</span>습관</button>
   <button data-tab="creed"><span class="ic">✝</span>고백문</button>
   <button data-tab="prop"><span class="ic">✎</span>제안서</button>
   <button data-tab="rec"><span class="ic">▤</span>기록</button>
@@ -544,7 +561,7 @@ try{ const raw=localStorage.getItem(KEY); if(raw) S=Object.assign(S,JSON.parse(r
 S.qa=S.qa||{idx:0,done:{}};
 function normalize(){
   S.days=S.days||{}; S.topics=S.topics||[]; S.todos=S.todos||[]; S.qa=S.qa||{idx:0,done:{}};
-  S.ideas=S.ideas||[]; S.wins=S.wins||[];
+  S.ideas=S.ideas||[]; S.wins=S.wins||[]; S.habits=S.habits||[]; S.habitLog=S.habitLog||{}; S.mastered=S.mastered||[];
   if(!S.moti) S.moti=[{id:'m1',t:'지금 이 한 시간이 11월의 나를 만든다.',ex:1},{id:'m2',t:'기분은 따라온다. 나는 먼저 시작하는 사람이다.',ex:1},{id:'m3',t:'어제의 나보다 한 걸음. 그거면 오늘은 이긴 거다.',ex:1}]; S.myVerses=S.myVerses||[]; if(S.dday===undefined) S.dday=DEFAULT_DDAY;
   if(!S.props){
     S.props={seq:0,items:[]};
@@ -556,7 +573,6 @@ function normalize(){
 normalize();
 function persist(){ S.updatedAt=Date.now(); try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){} }
 const day = k => { k=k||todayKey(); S.days[k]=S.days[k]||{}; return S.days[k]; };
-S.todos.forEach(t=>{ if(t.done && t.doneDay!==todayKey()) t.archived=true; });
 
 // ---------- tabs ----------
 function showTab(k){ document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===k)); document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id==='p-'+k)); window.scrollTo({top:0}); if(k==='aff'){ const p=$('affPick'), on=p.querySelector('.on'); if(on) p.scrollLeft=on.offsetLeft-p.clientWidth/2; } }
@@ -696,20 +712,41 @@ $('qaPrev').onclick=()=>{ S.qa.idx=(S.qa.idx-1+WSC.length)%WSC.length; persist()
 $('qaNext').onclick=()=>{ S.qa.idx=(S.qa.idx+1)%WSC.length; persist(); renderQA(); };
 $('qaDone').onclick=()=>{ const d=day(); d.qa=true; S.qa.idx=(S.qa.idx+1)%WSC.length; persist(); render(); };
 
-// ---------- todos ----------
-function activeTodos(){ return S.todos.filter(t=>!t.archived); }
-function ageDays(t){ return Math.round((new Date(todayKey()+'T00:00:00')-new Date(t.created+'T00:00:00'))/86400000); }
-function renderTodos(){
-  const list=activeTodos(); const done=list.filter(t=>t.done).length;
-  $('todoMeta').textContent=list.length?done+'/'+list.length+' 완료':'없음'; $('homeTodoMeta').textContent=list.length?done+'/'+list.length:'';
-  const html=t=>`<div class="td ${t.done?'done':''} ${t.star?'top3':''}" data-id="${t.id}"><button class="chk" data-act="tog">${t.done?'✓':''}</button><div><div class="t" ${ageDays(t)>=3&&!t.done?'style="font-weight:700;color:var(--wine)"':''}>${esc(t.t)}</div><div class="meta">${t.created!==todayKey()?'이월 '+ageDays(t)+'일째':''}</div></div><span><button class="x" data-act="star">${t.star?'★':'☆'}</button><button class="x" data-act="del">×</button></span></div>`;
-  const sorted=[...list].sort((a,b)=>(a.done-b.done)||(b.star-a.star));
-  $('todos').innerHTML=sorted.length?sorted.map(html).join(''):'<div class="empty">오늘 할 일을 적어 보자. 셋이면 충분하다.</div>';
-  $('homeTodos').innerHTML=sorted.filter(t=>!t.done).slice(0,5).map(html).join('')||'<div class="empty">'+(list.length?'오늘 할 일을 다 마쳤다.':'아직 할 일이 없다.')+'</div>';
+// ---------- 습관 (매일 새로 뜨는 체크리스트) ----------
+const HB_SUGGEST=['오늘 분량 공부','영단어 암기','운동','성경 읽기','폰은 금욕상자에','12시 전에 자기'];
+const hbDone=(id,k)=>!!((S.habitLog[k||todayKey()]||{})[id]);
+function hbStreak(id){ let n=0; const d=new Date(); if(!hbDone(id,fmtK(d))) d.setDate(d.getDate()-1); while(hbDone(id,fmtK(d))&&n<3000){ n++; d.setDate(d.getDate()-1); } return n; }
+function hbWeek(id){ let h=''; for(let i=6;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); h+='<i class="'+(hbDone(id,fmtK(d))?'y':'')+'"></i>'; } return '<span class="wk">'+h+'</span>'; }
+function hbTotal(id){ return Object.values(S.habitLog).filter(x=>x[id]).length; }
+let hbEditId=null;
+function renderHabits(){
+  const L=S.habits, done=L.filter(h=>hbDone(h.id)).length;
+  $('habitMeta').textContent=L.length?done+'/'+L.length+' 완료':''; $('homeHabitMeta').textContent=L.length?done+'/'+L.length:'';
+  const row=h=>{ const st=hbStreak(h.id); return `<div class="hb ${hbDone(h.id)?'done':''}" data-hb="${h.id}"><span class="chk">${hbDone(h.id)?'✓':''}</span><div><div class="t">${esc(h.t)}</div><div class="meta">${hbWeek(h.id)}<span>누적 ${hbTotal(h.id)}일</span></div></div><span class="st">${st?'🔥'+st+'일':''}</span></div>`; };
+  const html=L.map(row).join('');
+  $('habits').innerHTML=html||'<div class="empty">아직 습관이 없다. 아래에서 하나만 먼저 정하자. 적을수록 오래 간다.</div>';
+  $('homeHabits').innerHTML=html||'<div class="empty">습관 탭에서 매일 할 것을 정해 두면 여기 매일 뜬다.</div>';
+  const have=new Set(L.map(h=>h.t)); const sug=HB_SUGGEST.filter(t=>!have.has(t));
+  $('hbSuggest').innerHTML=L.length<3?sug.map(t=>`<button data-hbs="${esc(t)}">+ ${esc(t)}</button>`).join(''):'';
+  $('hbManage').innerHTML=L.map(h=>h.id===hbEditId
+    ?`<div class="hbedit"><input type="text" id="hbEditIn" value="${esc(h.t)}" maxlength="60"><div class="acts"><button class="btn small primary" data-hbsave="${h.id}">저장</button></div></div>`
+    :`<div class="hbedit"><span>${esc(h.t)}</span><div class="acts"><button class="btn small" data-hbedit="${h.id}">수정</button><button class="btn small" data-hbmaster="${h.id}">마스터</button><button class="btn small" data-hbdel="${h.id}" style="color:var(--wine)">삭제</button></div></div>`).join('')||'<div class="empty">정리할 습관이 없다.</div>';
+  $('hbMasterWrap').hidden=!S.mastered.length; $('hbMaster').innerHTML=S.mastered.map(m=>`<span>🏅 ${esc(m.t)} · ${m.days}일</span>`).join('');
 }
-function addTodo(){ const t=$('tdNew').value.trim(); if(!t) return; S.todos.unshift({id:Math.random().toString(36).slice(2,9), t, done:false, star:activeTodos().filter(x=>x.star).length<3, created:todayKey()}); $('tdNew').value=''; persist(); render(); }
-$('tdAdd').onclick=addTodo; $('tdNew').addEventListener('keydown',e=>{ if(e.key==='Enter') addTodo(); });
-document.addEventListener('click',e=>{ const b=e.target.closest('[data-act]'); if(!b) return; const el=b.closest('.td'); const t=S.todos.find(x=>x.id===el.dataset.id); if(!t) return; if(b.dataset.act==='tog'){ t.done=!t.done; t.doneDay=t.done?todayKey():''; const d=day(); d.todo=Math.max(0,(d.todo||0)+(t.done?1:-1)); } if(b.dataset.act==='star') t.star=!t.star; if(b.dataset.act==='del') S.todos=S.todos.filter(x=>x!==t); persist(); render(); });
+function syncHabitDay(){ const d=day(); d.todo=S.habits.filter(h=>hbDone(h.id)).length; }
+function addHabit(t){ t=(t||'').trim(); if(!t) return; S.habits.push({id:Math.random().toString(36).slice(2,9),t,created:todayKey()}); persist(); render(); }
+const hbDict=micFor($('hbMic'),$('hbNew'),$('hbHint'),err=>{ if(!err) $('hbHint').textContent='받아 적었다. 맞으면 추가.'; });
+$('hbAdd').onclick=()=>{ const go=()=>{ const t=$('hbNew').value; $('hbNew').value=''; $('hbHint').textContent=''; addHabit(t); }; if(hbDict.active()){ hbDict.stop(); setTimeout(go,1700); } else go(); };
+$('hbNew').addEventListener('keydown',e=>{ if(e.key==='Enter') $('hbAdd').click(); });
+document.addEventListener('click',e=>{
+  const q=s=>e.target.closest(s); let b;
+  if(b=q('[data-hb]')){ const id=b.dataset.hb, k=todayKey(); S.habitLog[k]=S.habitLog[k]||{}; if(S.habitLog[k][id]) delete S.habitLog[k][id]; else S.habitLog[k][id]=1; syncHabitDay(); persist(); render(); return; }
+  if(b=q('[data-hbs]')) return addHabit(b.dataset.hbs);
+  if(b=q('[data-hbedit]')){ hbEditId=b.dataset.hbedit; renderHabits(); const i=$('hbEditIn'); if(i) i.focus(); return; }
+  if(b=q('[data-hbsave]')){ const h=S.habits.find(x=>x.id===b.dataset.hbsave), v=$('hbEditIn').value.trim(); if(h&&v) h.t=v; hbEditId=null; persist(); render(); return; }
+  if(b=q('[data-hbmaster]')){ const h=S.habits.find(x=>x.id===b.dataset.hbmaster); if(!h) return; S.mastered.unshift({t:h.t,days:hbTotal(h.id),d:todayKey()}); S.habits=S.habits.filter(x=>x!==h); syncHabitDay(); persist(); render(); return; }
+  if(b=q('[data-hbdel]')){ if(b.dataset.armed){ S.habits=S.habits.filter(x=>x.id!==b.dataset.hbdel); syncHabitDay(); persist(); render(); } else { b.dataset.armed='1'; b.textContent='정말 삭제'; } return; }
+});
 
 // ---------- 셀프 동기부여 ----------
 const rid=()=>Math.random().toString(36).slice(2,9);
@@ -752,7 +789,7 @@ $('fiveStart').onclick=()=>{
 // ---------- 아이디어 보관함 ----------
 function renderIdeas(){
   $('ideaMeta').textContent=S.ideas.length?S.ideas.length+'개 보관 중':'';
-  $('ideas').innerHTML=S.ideas.length?S.ideas.map(x=>`<div class="tp" style="grid-template-columns:auto 1fr" data-idea="${x.id}"><span class="cat">${x.d.slice(5)}</span><span class="t">${esc(x.t)}<div style="margin-top:4px"><button class="ans" data-ia="todo">할 일로</button> <button class="ans" data-ia="prop">제안서로</button> <button class="ans" data-ia="del">버리기</button></div></span></div>`).join(''):'<div class="empty">비어 있다. 머리가 가벼운 상태.</div>';
+  $('ideas').innerHTML=S.ideas.length?S.ideas.map(x=>`<div class="tp" style="grid-template-columns:auto 1fr" data-idea="${x.id}"><span class="cat">${x.d.slice(5)}</span><span class="t">${esc(x.t)}<div style="margin-top:4px"><button class="ans" data-ia="todo">습관으로</button> <button class="ans" data-ia="prop">제안서로</button> <button class="ans" data-ia="del">버리기</button></div></span></div>`).join(''):'<div class="empty">비어 있다. 머리가 가벼운 상태.</div>';
 }
 function addIdea(){ const t=$('ideaNew').value.trim(); if(!t) return; S.ideas.unshift({id:Math.random().toString(36).slice(2,9),t,d:todayKey()}); $('ideaNew').value=''; persist(); render(); }
 const ideaDict=micFor($('ideaMic'),$('ideaNew'),$('ideaHint'),err=>{ if(!err){ $('ideaHint').textContent=''; addIdea(); } });
@@ -760,7 +797,7 @@ $('ideaAdd').onclick=()=>{ if(ideaDict.active()) ideaDict.stop(); else addIdea()
 $('ideaNew').addEventListener('keydown',e=>{ if(e.key==='Enter') addIdea(); });
 $('ideas').onclick=e=>{ const b=e.target.closest('[data-ia]'); if(!b) return; const id=b.closest('[data-idea]').dataset.idea; const x=S.ideas.find(v=>v.id===id); if(!x) return;
   if(b.dataset.ia==='prop'){ openPropEditor(null,x.t,id); showTab('prop'); return; }
-  if(b.dataset.ia==='todo') S.todos.unshift({id:Math.random().toString(36).slice(2,9), t:x.t, done:false, star:false, created:todayKey()});
+  if(b.dataset.ia==='todo') S.habits.push({id:Math.random().toString(36).slice(2,9), t:x.t.slice(0,60), created:todayKey()});
   S.ideas=S.ideas.filter(v=>v.id!==id); persist(); render(); };
 
 // ---------- 인생 제안서 ----------
@@ -833,7 +870,7 @@ function renderToday(){
     {n:'六',t:'소요리문답 한 문',s:d.qa?'읽음':'문과 답 소리 내어 읽기',done:!!d.qa,go:'creed'},
     {n:'七',t:'주기도문 · 사도신경',s:(d.lp||d.ac)?'읽음':'고백문 한 번',done:!!(d.lp||d.ac),go:'creed'},
     {n:'八',t:'오늘의 질문에 답하기',s:(d.think&&d.think.a)?'적음':'한두 문장',done:!!(d.think&&d.think.a),go:'today'},
-    {n:'九',t:'오늘의 할 일 셋 정하기',s:activeTodos().filter(t=>t.star).length+'개 ★',done:activeTodos().filter(t=>t.star).length>=1,go:'todo'}];
+    {n:'九',t:'오늘의 습관 체크',s:S.habits.length?S.habits.filter(h=>hbDone(h.id)).length+'/'+S.habits.length:'습관을 정하자',done:S.habits.length>0&&S.habits.every(h=>hbDone(h.id)),go:'todo'}];
   if(mode==='quick') items=items.filter(i=>['一','四','九'].includes(i.n));
   if(mode==='random') items=seededShuffle(items, nowD.getDate()*31+nowD.getMonth());
   $('flow').innerHTML=items.map(i=>`<div class="fi ${i.done?'done':''}"><div class="n">${i.n}</div><div><div class="t">${i.t}</div><div class="s">${i.s}</div></div><button class="go" data-go="${i.go}">${i.done?'보기':'하기'}</button></div>`).join('');
@@ -854,17 +891,17 @@ function renderRec(){
   // weekly review
   const wk=[]; for(let i=6;i>=0;i--){ const d=new Date(now); d.setDate(d.getDate()-i); wk.push(S.days[fmtK(d)]||{}); }
   const n=f=>wk.filter(f).length;
-  $('review').innerHTML=`<div><b>${n(x=>x.aff)}</b>고백한 날</div><div><b>${n(x=>x.pray)}</b>기도한 날</div><div><b>${wk.reduce((a,x)=>a+(x.todo||0),0)}</b>끝낸 할 일</div><div><b>${Math.round(wk.reduce((a,x)=>a+(x.silence||0),0)/60)}분</b>침묵 기도</div><div><b>${S.topics.filter(t=>t.answered&&daysSince(t.answered)<=7).length}</b>이번 주 응답</div><div><b>${n(x=>x.qa)}</b>문답 읽은 날</div>`;
+  $('review').innerHTML=`<div><b>${n(x=>x.aff)}</b>고백한 날</div><div><b>${n(x=>x.pray)}</b>기도한 날</div><div><b>${wk.reduce((a,x)=>a+(x.todo||0),0)}</b>지킨 습관 (회)</div><div><b>${Math.round(wk.reduce((a,x)=>a+(x.silence||0),0)/60)}분</b>침묵 기도</div><div><b>${S.topics.filter(t=>t.answered&&daysSince(t.answered)<=7).length}</b>이번 주 응답</div><div><b>${n(x=>x.qa)}</b>문답 읽은 날</div>`;
   const best=n(x=>x.aff&&x.pray); $('reviewNote').textContent= best>=6?'거의 매일 제단을 쌓았다. 다음 주엔 침묵 기도 시간을 늘려 보자.': best>=3?'절반 이상. 빠진 날의 공통점이 있나? (요일·전날 밤)': '이번 주는 드물었다. 속성 모드(3분)로라도 매일 한 번.';
   const q=($('search').value||'').trim();
   const keys=Object.keys(S.days).filter(k=>S.days[k].aff||S.days[k].pray||winsOf(k).length||(S.days[k].grat||[]).some(Boolean)||(S.days[k].think&&S.days[k].think.a)).sort().reverse().filter(k=>{ const x=S.days[k]; return !q||((x.aff||'')+winsOf(k).map(w=>w.t).join(' ')+(x.pray||'')+(x.grat||[]).join(' ')+((x.think&&x.think.a)||'')).includes(q); }).slice(0,60);
-  $('arch').innerHTML=keys.length?keys.map(k=>{ const x=S.days[k]; return `<div class="day"><div class="dt"><span>${k}</span><span>${x.todo?'할 일 '+x.todo+'개':''}${x.silence?' · 침묵 '+Math.round(x.silence/60)+'분':''}${x.lp||x.ac?' · 고백문':''}</span></div>${x.aff?'<div class="lbl">고백 · '+(x.affRef||'')+'</div><div class="tx">'+esc(x.aff)+'</div>':''}${(x.grat||[]).some(Boolean)?'<div class="lbl">감사</div><div class="tx">'+x.grat.filter(Boolean).map(esc).join(' / ')+'</div>':''}${x.pray?'<div class="lbl">기도</div><div class="tx">'+esc(x.pray)+'</div>':''}${winsOf(k).length?'<div class="lbl">승리</div><div class="tx">'+winsOf(k).map(w=>esc(w.t)).join(' / ')+'</div>':''}${(x.think&&x.think.a)?'<div class="lbl">생각 · '+esc(THINK[x.think.q][0])+'</div><div class="tx">'+esc(x.think.a)+'</div>':''}</div>`; }).join(''):'<div class="empty">'+(q?'찾는 말이 없다.':'첫 고백과 기도를 저장하면 여기 쌓인다.')+'</div>';
+  $('arch').innerHTML=keys.length?keys.map(k=>{ const x=S.days[k]; return `<div class="day"><div class="dt"><span>${k}</span><span>${x.todo?'습관 '+x.todo+'개':''}${x.silence?' · 침묵 '+Math.round(x.silence/60)+'분':''}${x.lp||x.ac?' · 고백문':''}</span></div>${x.aff?'<div class="lbl">고백 · '+(x.affRef||'')+'</div><div class="tx">'+esc(x.aff)+'</div>':''}${(x.grat||[]).some(Boolean)?'<div class="lbl">감사</div><div class="tx">'+x.grat.filter(Boolean).map(esc).join(' / ')+'</div>':''}${x.pray?'<div class="lbl">기도</div><div class="tx">'+esc(x.pray)+'</div>':''}${winsOf(k).length?'<div class="lbl">승리</div><div class="tx">'+winsOf(k).map(w=>esc(w.t)).join(' / ')+'</div>':''}${(x.think&&x.think.a)?'<div class="lbl">생각 · '+esc(THINK[x.think.q][0])+'</div><div class="tx">'+esc(x.think.a)+'</div>':''}</div>`; }).join(''):'<div class="empty">'+(q?'찾는 말이 없다.':'첫 고백과 기도를 저장하면 여기 쌓인다.')+'</div>';
 }
 $('search').addEventListener('input',renderRec);
 // backup
 $('bkCopy').onclick=async()=>{ try{ await navigator.clipboard.writeText(JSON.stringify(S)); $('bkHint').textContent='복사했다. 메모 앱에 붙여 두자.'; }catch(e){ prompt('아래 내용을 복사해 두자', JSON.stringify(S)); } };
 $('bkPaste').onclick=async()=>{ let txt=''; try{ txt=await navigator.clipboard.readText(); }catch(e){ txt=prompt('백업 내용을 붙여넣자')||''; } try{ const o=JSON.parse(txt); if(!o.days) throw 0; if(!confirm('현재 기록을 붙여넣은 기록으로 바꿀까?')) return; S=Object.assign({days:{},topics:[],todos:[],qa:{idx:0,done:{}}},o); normalize(); persist(); render(); $('bkHint').textContent='복원했다.'; }catch(e){ $('bkHint').textContent='붙여넣은 내용이 백업 형식이 아니다.'; } };
-function render(){ renderToday(); renderDday(); renderMoti(); renderAff(); renderGrat(); renderIdeas(); renderProps(); renderThink(); renderPray(); renderTodos(); renderQA(); renderRec(); }
+function render(){ renderToday(); renderDday(); renderMoti(); renderAff(); renderGrat(); renderIdeas(); renderProps(); renderThink(); renderPray(); renderHabits(); renderQA(); renderRec(); }
 render();
 })();
 </script>
