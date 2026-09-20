@@ -206,6 +206,21 @@ details.manage{margin-top:12px;font-family:"Noto Sans KR";font-size:13.5px}detai
 .hbedit:first-child{border-top:0}.hbedit .acts{display:flex;gap:6px}
 .master{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.master span{font-size:13px;padding:4px 10px;border-radius:999px;background:var(--gold-soft);border:1px solid var(--gold);font-family:"Noto Sans KR"}
 
+.bbnow{font-size:26px;font-weight:700;letter-spacing:.04em;margin:2px 0 6px}
+.bbnow small{font-size:13px;font-weight:400;color:var(--muted);font-family:"Noto Sans KR";margin-left:8px;letter-spacing:0}
+.bbprog{height:10px;border-radius:5px;background:var(--paper2);border:1px solid var(--rule);overflow:hidden;margin-top:6px}.bbprog i{display:block;height:100%;background:var(--navy)}
+.shelf{display:flex;flex-wrap:wrap;align-items:flex-end;gap:3px 2px;margin-top:10px;padding:8px 6px 0;border-bottom:6px solid #8a6a3a;background:linear-gradient(180deg,transparent 0 calc(100% - 1px),rgba(0,0,0,.08));border-radius:2px}
+.spine{position:relative;width:15px;border:1px solid var(--rule);border-radius:2px 2px 0 0;background:var(--paper);overflow:hidden;padding:0;flex:none}
+.spine i{position:absolute;left:0;right:0;bottom:0;background:var(--navy-soft)}
+.spine.nt i{background:var(--wine-soft)}
+.spine.full{border-color:var(--gold)}.spine.full i{background:var(--gold)}
+.spine.sel{outline:2px solid var(--ink);outline-offset:1px}
+.spine span{position:absolute;inset:3px 0 0 0;writing-mode:vertical-rl;text-orientation:upright;font-size:8.5px;line-height:13px;font-family:"Noto Sans KR";color:var(--ink);letter-spacing:-1px;text-align:start}
+.chgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(38px,1fr));gap:5px;margin-top:8px}
+.chgrid button{padding:7px 0;border-radius:5px;border:1.5px solid var(--rule);background:var(--paper);font-family:"IBM Plex Mono";font-size:13px}
+.chgrid button.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.bbset{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px;font-family:"Noto Sans KR";font-size:13px;color:var(--muted)}
+
 /* tabs */
 .tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;background:var(--page);border-top:1px solid var(--rule);padding:6px 4px calc(env(safe-area-inset-bottom,0px) + 6px);box-shadow:0 -6px 20px rgba(60,40,10,.08)}
 .tabs button{flex:1;min-width:0;padding:6px 1px;font-size:10.5px;white-space:nowrap;color:var(--faint);display:grid;place-items:center;gap:2px;font-family:"Noto Sans KR"}
@@ -288,7 +303,25 @@ details.manage{margin-top:12px;font-family:"Noto Sans KR";font-size:13.5px}detai
       <div class="saved" id="affSaved"></div>
     </div>
     <div class="sheet">
-      <h2><span class="ch">II-b</span>감사 세 가지</h2>
+      <h2><span class="ch">II-b</span>성경 통독<small id="bbMeta"></small></h2>
+      <div class="think"><div class="q" id="bbWhyQ"></div><div class="s" id="bbWhyS"></div></div>
+      <div class="lbl2">오늘 읽을 곳</div>
+      <div class="bbnow" id="bbNow"></div>
+      <p class="lead" style="margin:0">펴기 전에 한 줄 — "내 눈을 열어서 주의 법의 기이한 것을 보게 하소서" (시 119:18). 한 장은 보통 <b>4~5분</b>이다. 쇼츠 몇 개 값이다.</p>
+      <div class="rowbtns"><button class="btn primary" id="bbRead">읽었다 · 다음 장으로</button><button class="btn small" id="bbUndo" hidden>방금 것 취소</button></div>
+      <div class="saved" id="bbToday"></div>
+      <div class="lbl2">오늘 붙든 한 절</div>
+      <div class="inrow"><input type="text" id="bbNote" placeholder="마음에 걸린 구절이나 한 줄 생각 (장절만 적어도 된다)" maxlength="200"><button class="mic" id="bbMic">🎙</button></div>
+      <div class="hint" id="bbHint"></div>
+      <div class="lbl2">내 성경 책장 <span id="bbPct" style="color:var(--muted);letter-spacing:0;font-weight:400"></span></div>
+      <div class="bbprog"><i id="bbBar"></i></div>
+      <div class="hint" id="bbEta" style="min-height:0"></div>
+      <div class="shelf" id="bbShelf"></div>
+      <div id="bbBook" hidden><div class="lbl2" id="bbBookName"></div><div class="chgrid" id="bbChs"></div><div class="hint">읽은 장을 눌러 표시한다. 다시 누르면 지워진다. 이미 읽은 책은 여기서 한꺼번에 채워도 된다.</div><div class="rowbtns" style="margin-top:4px"><button class="btn small" id="bbAll">이 책 전부 읽음</button><button class="btn small" id="bbClose">닫기</button></div></div>
+      <div class="bbset"><span>순서</span><div class="pick" id="bbOrder" style="margin:0"><button data-o="nt">신약부터</button><button data-o="seq">창세기부터</button></div><span>하루 목표</span><div class="pick" id="bbGoal" style="margin:0"><button data-g="1">1장</button><button data-g="2">2장</button><button data-g="3">3장</button><button data-g="4">4장</button></div></div>
+    </div>
+    <div class="sheet">
+      <h2><span class="ch">II-c</span>감사 세 가지</h2>
       <p class="lead">당연해 보이는 것부터. 구체적일수록 힘이 세다. 🎙을 누르고 말해도 된다.</p>
       <div class="grat" id="grat"></div>
       <div class="hint" id="gratHint"></div>
@@ -561,7 +594,7 @@ try{ const raw=localStorage.getItem(KEY); if(raw) S=Object.assign(S,JSON.parse(r
 S.qa=S.qa||{idx:0,done:{}};
 function normalize(){
   S.days=S.days||{}; S.topics=S.topics||[]; S.todos=S.todos||[]; S.qa=S.qa||{idx:0,done:{}};
-  S.ideas=S.ideas||[]; S.wins=S.wins||[]; S.habits=S.habits||[]; S.habitLog=S.habitLog||{}; S.mastered=S.mastered||[];
+  S.ideas=S.ideas||[]; S.wins=S.wins||[]; S.bible=S.bible||{read:{},order:'nt',goal:1,done:{}}; S.bible.read=S.bible.read||{}; S.bible.done=S.bible.done||{}; S.habits=S.habits||[]; S.habitLog=S.habitLog||{}; S.mastered=S.mastered||[];
   if(!S.moti) S.moti=[{id:'m1',t:'지금 이 한 시간이 11월의 나를 만든다.',ex:1},{id:'m2',t:'기분은 따라온다. 나는 먼저 시작하는 사람이다.',ex:1},{id:'m3',t:'어제의 나보다 한 걸음. 그거면 오늘은 이긴 거다.',ex:1}]; S.myVerses=S.myVerses||[]; if(S.dday===undefined) S.dday=DEFAULT_DDAY;
   if(!S.props){
     S.props={seq:0,items:[]};
@@ -659,6 +692,62 @@ $('vAddToggle').onclick=()=>{ $('vAddBox').hidden=!$('vAddBox').hidden; };
 $('vAdd').onclick=()=>{ const t=$('vNewT').value.trim(), r=$('vNewR').value.trim(); if(!t) return; S.myVerses.push({id:Math.random().toString(36).slice(2,9),t,r:r||'내 구절'}); $('vNewT').value=''; $('vNewR').value=''; $('vAddBox').hidden=true; affIdx=allWords().length-1; persist(); render(); };
 $('vDel').onclick=()=>{ const w=allWords()[affIdx]; if(!w||!w.mine) return; S.myVerses=S.myVerses.filter(v=>v.id!==w.mine); affIdx=(new Date().getDate()-1)%WORD.length; persist(); render(); };
 makeRecorder({btn:$('affRec'), hint:$('affHint'), tx:$('affTx'), save:$('affSave'), label:'● 말로 고백하기', onDone:text=>{ const d=day(); d.aff=text; d.affRef=allWords()[affIdx].r; d.wordRead=true; persist(); render(); }});
+
+// ---------- 성경 통독 ----------
+const BOOKS=[['창세기','창',50],['출애굽기','출',40],['레위기','레',27],['민수기','민',36],['신명기','신',34],['여호수아','수',24],['사사기','삿',21],['룻기','룻',4],['사무엘상','삼상',31],['사무엘하','삼하',24],['열왕기상','왕상',22],['열왕기하','왕하',25],['역대상','대상',29],['역대하','대하',36],['에스라','스',10],['느헤미야','느',13],['에스더','에',10],['욥기','욥',42],['시편','시',150],['잠언','잠',31],['전도서','전',12],['아가','아',8],['이사야','사',66],['예레미야','렘',52],['예레미야애가','애',5],['에스겔','겔',48],['다니엘','단',12],['호세아','호',14],['요엘','욜',3],['아모스','암',9],['오바댜','옵',1],['요나','욘',4],['미가','미',7],['나훔','나',3],['하박국','합',3],['스바냐','습',3],['학개','학',2],['스가랴','슥',14],['말라기','말',4],
+ ['마태복음','마',28],['마가복음','막',16],['누가복음','눅',24],['요한복음','요',21],['사도행전','행',28],['로마서','롬',16],['고린도전서','고전',16],['고린도후서','고후',13],['갈라디아서','갈',6],['에베소서','엡',6],['빌립보서','빌',4],['골로새서','골',4],['데살로니가전서','살전',5],['데살로니가후서','살후',3],['디모데전서','딤전',6],['디모데후서','딤후',4],['디도서','딛',3],['빌레몬서','몬',1],['히브리서','히',13],['야고보서','약',5],['베드로전서','벧전',5],['베드로후서','벧후',3],['요한일서','요일',5],['요한이서','요이',1],['요한삼서','요삼',1],['유다서','유',1],['요한계시록','계',22]];
+const BB_TOTAL=BOOKS.reduce((a,b)=>a+b[2],0), NT0=39;
+const BB_WHY=[
+ ['성경을 안 읽어도 신앙생활은 굴러간다. 그런데 왜 읽나?','설교와 찬양은 남이 씹어 준 말씀이다. 내 입으로 먹지 않으면 남의 신앙에 얹혀 간다. "사람이 떡으로만 살 것이 아니요 하나님의 입으로 나오는 모든 말씀으로 살 것이라" (마 4:4)'],
+ ['기도는 내가 하나님께 하는 말이다. 그럼 하나님은 어디서 말씀하시나?','장로교의 답은 분명하다 — 성경에서. 읽지 않으면 대화가 아니라 혼잣말이 된다. (딤후 3:16-17, 소요리문답 2문)'],
+ ['유혹은 생각할 시간을 주지 않는다.','예수님은 광야에서 세 번 다 "기록되었으되"로 답하셨다(마 4장). 그 순간 꺼낼 말씀은 미리 읽어 둔 것뿐이다. "내가 주께 범죄치 아니하려 하여 주의 말씀을 내 마음에 두었나이다" (시 119:11)'],
+ ['믿음이 약하다고 느낄 때 무엇을 해야 하나?','믿음은 짜내는 게 아니라 들어서 생긴다. "믿음은 들음에서 나며 들음은 그리스도의 말씀으로 말미암았느니라" (롬 10:17)'],
+ ['하루 중 가장 많이 읽는 글이 무엇인가?','피드와 상품 설명을 하루 한두 시간 읽는다면, 나를 빚는 건 그 글이다. 성경 전체는 소리 내어 읽어도 70~80시간쯤이다. 스크롤 한 달 치다.'],
+ ['길을 모를 때 기준이 있나?','"주의 말씀은 내 발에 등이요 내 길에 빛이니이다" (시 119:105). 등불은 먼 데가 아니라 다음 한 걸음을 비춘다. 오늘 한 장이 오늘의 한 걸음이다.'],
+ ['형통하고 싶다면?','여호수아에게 주신 조건은 전략이 아니었다. "이 율법책을 네 입에서 떠나지 말게 하며 주야로 그것을 묵상하여…" (수 1:8). 시편 1편의 복 있는 사람도 같다.'],
+ ['다 읽어 본 적도 없는 책을 믿는다고 말할 수 있나?','한 번은 처음부터 끝까지 읽어 보자. 하루 서너 장이면 1년이다. 아래 책장이 다 차는 날이 온다.'],
+];
+const bbKey=(b,c)=>b+'-'+c, bbIs=(b,c)=>!!S.bible.read[bbKey(b,c)];
+const bbOrder=()=>{ const idx=BOOKS.map((_,i)=>i); return S.bible.order==='seq'?idx:idx.slice(NT0).concat(idx.slice(0,NT0)); };
+function bbNext(){ for(const b of bbOrder()) for(let c=1;c<=BOOKS[b][2];c++) if(!bbIs(b,c)) return [b,c]; return null; }
+const bbCount=()=>Object.keys(S.bible.read).length;
+const bbOn=k=>Object.values(S.bible.read).filter(d=>d===k).length;
+function bbStreak(){ let n=0; const d=new Date(); if(!bbOn(fmtK(d))) d.setDate(d.getDate()-1); while(bbOn(fmtK(d))&&n<3000){ n++; d.setDate(d.getDate()-1); } return n; }
+let bbSel=null, bbLast=null, bbMsg='';
+function bbMark(b,c,on){ const k=bbKey(b,c); if(on) S.bible.read[k]=todayKey(); else delete S.bible.read[k];
+  const full=BOOKS[b][2]===Array.from({length:BOOKS[b][2]},(_,i)=>i+1).filter(x=>bbIs(b,x)).length;
+  if(full&&!S.bible.done[b]){ S.bible.done[b]=todayKey(); bbMsg='🎉 '+BOOKS[b][0]+' 완독! 책장에 금빛 책이 한 권 늘었다.'; } else if(!full) delete S.bible.done[b];
+  const d=day(); d.bible=bbOn(todayKey()); }
+function renderBible(){
+  const n=bbCount(), nx=bbNext(), t=todayKey(), td=bbOn(t), goal=S.bible.goal||1, w=BB_WHY[(new Date().getDate()+new Date().getMonth())%BB_WHY.length];
+  $('bbWhyQ').textContent=w[0]; $('bbWhyS').textContent=w[1];
+  $('bbMeta').textContent='연속 '+bbStreak()+'일';
+  $('bbNow').innerHTML=nx?esc(BOOKS[nx[0]][0])+' '+nx[1]+(nx[0]===18?'편':'장')+'<small>'+(nx[1]===1?'새 책을 시작한다':'전체 '+BOOKS[nx[0]][2]+(nx[0]===18?'편':'장')+' 중')+'</small>':'성경 전체를 다 읽었다. 다시 1독을 시작하자.';
+  $('bbRead').disabled=!nx; $('bbUndo').hidden=!bbLast;
+  $('bbToday').textContent=(td?'오늘 '+td+'장 읽음'+(td>=goal?' ✓ 목표 달성':' · 목표 '+goal+'장'):'오늘은 아직. 목표 '+goal+'장.')+(bbMsg?'  '+bbMsg:'');
+  $('bbPct').textContent='· '+n+' / '+BB_TOTAL+'장 ('+(n/BB_TOTAL*100).toFixed(1)+'%) · 완독한 책 '+Object.keys(S.bible.done).length+'권';
+  $('bbBar').style.width=(n/BB_TOTAL*100)+'%';
+  let recent=0; for(let i=0;i<14;i++){ const d=new Date(); d.setDate(d.getDate()-i); recent+=bbOn(fmtK(d)); }
+  const left=BB_TOTAL-n, eta=p=>{ const d=new Date(); d.setDate(d.getDate()+Math.ceil(left/p)); return d.getFullYear()+'년 '+(d.getMonth()+1)+'월'; };
+  $('bbEta').textContent=left?('하루 '+goal+'장이면 '+eta(goal)+' 완독'+(recent>=3?' · 최근 2주 속도(하루 '+(recent/14).toFixed(1)+'장)로는 '+eta(recent/14):'')+' · 하루 4장이면 '+eta(4)):'';
+  $('bbShelf').innerHTML=BOOKS.map((b,i)=>{ let r=0; for(let c=1;c<=b[2];c++) if(bbIs(i,c)) r++; const h=Math.round(34+Math.min(b[2],70)*0.75); return `<button class="spine ${i>=NT0?'nt':''} ${r===b[2]?'full':''} ${bbSel===i?'sel':''}" data-bk="${i}" style="height:${h}px;${i===NT0?'margin-left:8px':''}" aria-label="${b[0]}"><i style="height:${r/b[2]*100}%"></i><span>${b[1]}</span></button>`; }).join('');
+  $('bbBook').hidden=bbSel===null;
+  if(bbSel!==null){ const b=BOOKS[bbSel]; let r=0; for(let c=1;c<=b[2];c++) if(bbIs(bbSel,c)) r++; $('bbBookName').textContent=b[0]+' · '+r+'/'+b[2]; $('bbChs').innerHTML=Array.from({length:b[2]},(_,i)=>`<button class="${bbIs(bbSel,i+1)?'on':''}" data-ch="${i+1}">${i+1}</button>`).join(''); }
+  $('bbOrder').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x.dataset.o===(S.bible.order||'nt')));
+  $('bbGoal').querySelectorAll('button').forEach(x=>x.classList.toggle('on',+x.dataset.g===goal));
+  if(document.activeElement!==$('bbNote')&&!bbDict.active()) $('bbNote').value=day().bibleNote||'';
+}
+$('bbRead').onclick=()=>{ const nx=bbNext(); if(!nx) return; bbMsg=''; bbMark(nx[0],nx[1],true); bbLast=nx; persist(); render(); };
+$('bbUndo').onclick=()=>{ if(!bbLast) return; bbMsg=''; bbMark(bbLast[0],bbLast[1],false); bbLast=null; persist(); render(); };
+$('bbShelf').onclick=e=>{ const b=e.target.closest('[data-bk]'); if(!b) return; const i=+b.dataset.bk; bbSel=bbSel===i?null:i; renderBible(); };
+$('bbChs').onclick=e=>{ const b=e.target.closest('[data-ch]'); if(!b||bbSel===null) return; const c=+b.dataset.ch; bbMsg=''; bbMark(bbSel,c,!bbIs(bbSel,c)); bbLast=null; persist(); render(); };
+$('bbAll').onclick=()=>{ if(bbSel===null) return; bbMsg=''; for(let c=1;c<=BOOKS[bbSel][2];c++) if(!bbIs(bbSel,c)){ S.bible.read[bbKey(bbSel,c)]='이전'; } S.bible.done[bbSel]=S.bible.done[bbSel]||'이전'; persist(); render(); };
+$('bbClose').onclick=()=>{ bbSel=null; renderBible(); };
+$('bbOrder').onclick=e=>{ const b=e.target.closest('[data-o]'); if(b){ S.bible.order=b.dataset.o; persist(); renderBible(); } };
+$('bbGoal').onclick=e=>{ const b=e.target.closest('[data-g]'); if(b){ S.bible.goal=+b.dataset.g; persist(); render(); } };
+function saveBbNote(){ const d=day(); d.bibleNote=$('bbNote').value.trim(); persist(); renderRec(); }
+const bbDict=micFor($('bbMic'),$('bbNote'),$('bbHint'),err=>{ if(!err) $('bbHint').textContent=''; saveBbNote(); });
+$('bbNote').addEventListener('change',saveBbNote);
 
 // ---------- 감사 세 가지 (말로도 적는다) ----------
 let gratCur=null;
@@ -863,6 +952,7 @@ function renderToday(){
   $('topVerse').textContent=VERSES[nowD.getDay()];
   let items=[
     {n:'一',t:'말씀 · 소리 내어 읽고 고백',s:d.aff?'저장됨':(d.wordRead?'읽음 · 고백 남음':'오늘의 말씀'),done:!!d.aff,go:'aff'},
+    {n:'B',t:'성경 '+(S.bible.goal||1)+'장 읽기',s:(()=>{ const nx=bbNext(); return bbOn(todayKey())?'오늘 '+bbOn(todayKey())+'장 읽음':(nx?BOOKS[nx[0]][0]+' '+nx[1]+'장부터':'완독'); })(),done:bbOn(todayKey())>=(S.bible.goal||1),go:'aff'},
     {n:'二',t:'나를 일으키는 말 · 소리 내어',s:d.moti?'읽음':'내가 나에게 하는 말',done:!!d.moti,go:'today'},
     {n:'三',t:'감사 세 가지',s:(d.grat||[]).filter(x=>x).length+'/3',done:(d.grat||[]).filter(x=>x).length===3,go:'aff'},
     {n:'四',t:'기도 · 말하며',s:d.pray?'저장됨':'추천 제목 3가지',done:!!d.pray,go:'pray'},
@@ -871,8 +961,9 @@ function renderToday(){
     {n:'七',t:'주기도문 · 사도신경',s:(d.lp||d.ac)?'읽음':'고백문 한 번',done:!!(d.lp||d.ac),go:'creed'},
     {n:'八',t:'오늘의 질문에 답하기',s:(d.think&&d.think.a)?'적음':'한두 문장',done:!!(d.think&&d.think.a),go:'today'},
     {n:'九',t:'오늘의 습관 체크',s:S.habits.length?S.habits.filter(h=>hbDone(h.id)).length+'/'+S.habits.length:'습관을 정하자',done:S.habits.length>0&&S.habits.every(h=>hbDone(h.id)),go:'todo'}];
-  if(mode==='quick') items=items.filter(i=>['一','四','九'].includes(i.n));
+  if(mode==='quick') items=items.filter(i=>['一','B','四'].includes(i.n));
   if(mode==='random') items=seededShuffle(items, nowD.getDate()*31+nowD.getMonth());
+  items.forEach((it,i)=>it.n='一二三四五六七八九十'[i]||String(i+1));
   $('flow').innerHTML=items.map(i=>`<div class="fi ${i.done?'done':''}"><div class="n">${i.n}</div><div><div class="t">${i.t}</div><div class="s">${i.s}</div></div><button class="go" data-go="${i.go}">${i.done?'보기':'하기'}</button></div>`).join('');
   $('flow').querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>showTab(b.dataset.go));
   const full=k=>{ const x=S.days[k]||{}; return x.aff&&x.pray; };
@@ -894,14 +985,14 @@ function renderRec(){
   $('review').innerHTML=`<div><b>${n(x=>x.aff)}</b>고백한 날</div><div><b>${n(x=>x.pray)}</b>기도한 날</div><div><b>${wk.reduce((a,x)=>a+(x.todo||0),0)}</b>지킨 습관 (회)</div><div><b>${Math.round(wk.reduce((a,x)=>a+(x.silence||0),0)/60)}분</b>침묵 기도</div><div><b>${S.topics.filter(t=>t.answered&&daysSince(t.answered)<=7).length}</b>이번 주 응답</div><div><b>${n(x=>x.qa)}</b>문답 읽은 날</div>`;
   const best=n(x=>x.aff&&x.pray); $('reviewNote').textContent= best>=6?'거의 매일 제단을 쌓았다. 다음 주엔 침묵 기도 시간을 늘려 보자.': best>=3?'절반 이상. 빠진 날의 공통점이 있나? (요일·전날 밤)': '이번 주는 드물었다. 속성 모드(3분)로라도 매일 한 번.';
   const q=($('search').value||'').trim();
-  const keys=Object.keys(S.days).filter(k=>S.days[k].aff||S.days[k].pray||winsOf(k).length||(S.days[k].grat||[]).some(Boolean)||(S.days[k].think&&S.days[k].think.a)).sort().reverse().filter(k=>{ const x=S.days[k]; return !q||((x.aff||'')+winsOf(k).map(w=>w.t).join(' ')+(x.pray||'')+(x.grat||[]).join(' ')+((x.think&&x.think.a)||'')).includes(q); }).slice(0,60);
-  $('arch').innerHTML=keys.length?keys.map(k=>{ const x=S.days[k]; return `<div class="day"><div class="dt"><span>${k}</span><span>${x.todo?'습관 '+x.todo+'개':''}${x.silence?' · 침묵 '+Math.round(x.silence/60)+'분':''}${x.lp||x.ac?' · 고백문':''}</span></div>${x.aff?'<div class="lbl">고백 · '+(x.affRef||'')+'</div><div class="tx">'+esc(x.aff)+'</div>':''}${(x.grat||[]).some(Boolean)?'<div class="lbl">감사</div><div class="tx">'+x.grat.filter(Boolean).map(esc).join(' / ')+'</div>':''}${x.pray?'<div class="lbl">기도</div><div class="tx">'+esc(x.pray)+'</div>':''}${winsOf(k).length?'<div class="lbl">승리</div><div class="tx">'+winsOf(k).map(w=>esc(w.t)).join(' / ')+'</div>':''}${(x.think&&x.think.a)?'<div class="lbl">생각 · '+esc(THINK[x.think.q][0])+'</div><div class="tx">'+esc(x.think.a)+'</div>':''}</div>`; }).join(''):'<div class="empty">'+(q?'찾는 말이 없다.':'첫 고백과 기도를 저장하면 여기 쌓인다.')+'</div>';
+  const keys=Object.keys(S.days).filter(k=>S.days[k].aff||S.days[k].pray||S.days[k].bibleNote||winsOf(k).length||(S.days[k].grat||[]).some(Boolean)||(S.days[k].think&&S.days[k].think.a)).sort().reverse().filter(k=>{ const x=S.days[k]; return !q||((x.aff||'')+(x.bibleNote||'')+winsOf(k).map(w=>w.t).join(' ')+(x.pray||'')+(x.grat||[]).join(' ')+((x.think&&x.think.a)||'')).includes(q); }).slice(0,60);
+  $('arch').innerHTML=keys.length?keys.map(k=>{ const x=S.days[k]; return `<div class="day"><div class="dt"><span>${k}</span><span>${x.bible?'성경 '+x.bible+'장 · ':''}${x.todo?'습관 '+x.todo+'개':''}${x.silence?' · 침묵 '+Math.round(x.silence/60)+'분':''}${x.lp||x.ac?' · 고백문':''}</span></div>${x.aff?'<div class="lbl">고백 · '+(x.affRef||'')+'</div><div class="tx">'+esc(x.aff)+'</div>':''}${(x.grat||[]).some(Boolean)?'<div class="lbl">감사</div><div class="tx">'+x.grat.filter(Boolean).map(esc).join(' / ')+'</div>':''}${x.pray?'<div class="lbl">기도</div><div class="tx">'+esc(x.pray)+'</div>':''}${x.bibleNote?'<div class="lbl">성경 · 붙든 한 절</div><div class="tx">'+esc(x.bibleNote)+'</div>':''}${winsOf(k).length?'<div class="lbl">승리</div><div class="tx">'+winsOf(k).map(w=>esc(w.t)).join(' / ')+'</div>':''}${(x.think&&x.think.a)?'<div class="lbl">생각 · '+esc(THINK[x.think.q][0])+'</div><div class="tx">'+esc(x.think.a)+'</div>':''}</div>`; }).join(''):'<div class="empty">'+(q?'찾는 말이 없다.':'첫 고백과 기도를 저장하면 여기 쌓인다.')+'</div>';
 }
 $('search').addEventListener('input',renderRec);
 // backup
 $('bkCopy').onclick=async()=>{ try{ await navigator.clipboard.writeText(JSON.stringify(S)); $('bkHint').textContent='복사했다. 메모 앱에 붙여 두자.'; }catch(e){ prompt('아래 내용을 복사해 두자', JSON.stringify(S)); } };
 $('bkPaste').onclick=async()=>{ let txt=''; try{ txt=await navigator.clipboard.readText(); }catch(e){ txt=prompt('백업 내용을 붙여넣자')||''; } try{ const o=JSON.parse(txt); if(!o.days) throw 0; if(!confirm('현재 기록을 붙여넣은 기록으로 바꿀까?')) return; S=Object.assign({days:{},topics:[],todos:[],qa:{idx:0,done:{}}},o); normalize(); persist(); render(); $('bkHint').textContent='복원했다.'; }catch(e){ $('bkHint').textContent='붙여넣은 내용이 백업 형식이 아니다.'; } };
-function render(){ renderToday(); renderDday(); renderMoti(); renderAff(); renderGrat(); renderIdeas(); renderProps(); renderThink(); renderPray(); renderHabits(); renderQA(); renderRec(); }
+function render(){ renderToday(); renderDday(); renderMoti(); renderAff(); renderBible(); renderGrat(); renderIdeas(); renderProps(); renderThink(); renderPray(); renderHabits(); renderQA(); renderRec(); }
 render();
 })();
 </script>
